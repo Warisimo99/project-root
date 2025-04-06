@@ -4,7 +4,7 @@ const IMAGE_BASE_PATH = 'public/assets/images/';
 // Fetch posts from the backend
 async function fetchPosts() {
     try {
-        const response = await fetch('includes/post_operations/fetch_posts.php');
+        const response = await fetch('/includes/post_operations/fetch_posts.php');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
