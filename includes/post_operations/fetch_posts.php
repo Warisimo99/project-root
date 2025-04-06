@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once('/db.php');
+require_once('db.php');
 
 // Check if the connection was successful
 if (!$conn) {
@@ -14,7 +14,7 @@ $result = mysqli_query($conn, $sql);
 
 
 foreach ($posts as &$post) {
-    $post['image_url'] = 'http://aces-macbook-pro.local/project-root/public/images/' . $post['image'];
+    $post['image_url'] = '/public/images/' . $post['image'];
 }
 
 if (!$result) {
