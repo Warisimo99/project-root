@@ -1,0 +1,139 @@
+.swiper-container {
+    margin-right: auto;
+    width: 100%;
+    height: 400px;
+    margin: 20px 0;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.swiper-slide:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+}
+
+.card {
+    width: 90%; 
+    height: 80%;
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card img {
+    width: 100%; 
+    height: 80%; 
+    object-fit: cover; 
+    border-radius: 10px;
+    margin-bottom: 10px; 
+}
+
+.card h3 {
+    margin: 0; 
+    font-size: 1.2rem; 
+    color: #333;
+}
+
+.see-more-button {
+    display: none; 
+    position: absolute;
+    bottom: 20px; 
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.see-more-button:hover {
+    background-color: #0056b3; 
+}
+
+
+.card:hover .see-more-button {
+    display: block; 
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        width: 90%; 
+    }
+
+    .card img {
+        height: 120px; 
+    }
+
+    .card h3 {
+        font-size: 1rem; 
+    }
+
+    .swiper-slide:hover {
+        transform: scale(1.03); 
+    }
+}
+
+.footer {
+    background-color: #343a40; 
+    color: #fff; 
+    padding: 40px 0; 
+    text-align: center;
+}
+
+.hero-section {
+    background-image: url('https://thumbs.dreamstime.com/b/forex-big-data-candlestick-charts-blurred-city-background-trading-technology-investment-analysis-concept-decoration-352340721.jpg'); /* Add your image path */
+    background-size: cover; 
+    background-position: center; 
+    color: #f8f8f8; 
+    padding: 60px 20px; 
+}
+
+.hero-content h1,
+.hero-content p {
+    color: #ffffff; 
+}
+
+.hero-button {
+    background-color: #ffffff; 
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    padding-top: 4px;
+}
+
+.hero-button:hover {
+    background-color: #898989; 
+    border-radius: 5px;
+}
+
+
+.widget-container {
+    height: 900px; 
+    width: 100%; 
+    padding: 20px; 
+}
+
+.tradingview-widget-container {
+    height: 70%; 
+    width: 100%;
+}
+
+.tradingview-widget-container__widget {
+    height: calc(100% - 32px); 
+    width: 100%;
+}
