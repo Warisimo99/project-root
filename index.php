@@ -44,13 +44,13 @@
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="dashboard.php">Home</a>
+          <a class="nav-link active" aria-current="page" href="public/dashboard.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="help.php">Help</a>
+          <a class="nav-link active" aria-current="page" href="public/help.php">Help</a>
         </li>
         <li class="nav-item">
-        <a class="nav-link active text-bg-info p-2" aria-current="page" href="register.php">Register | Login</a>
+        <a class="nav-link active text-bg-info p-2" aria-current="page" href="public/register.php">Register | Login</a>
         </li>
         </div>
         </ul>
@@ -66,7 +66,7 @@
                 <p>Your platform for market updates,</p>
                 </b></b> 
                 <p>trading insights and community posts.</p>
-                <a href="register.php" class="hero-button">Get Started</a>
+                <a href="public/register.php" class="hero-button">Get Started</a>
             </div>
             <div class="hero-image"></div>
         </div>
