@@ -8,10 +8,10 @@
     <script src="https://kit.fontawesome.com/c8d66c9de4.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://aces-macbook-pro.local/assets/css/dashstyle.css">
+    <link rel="stylesheet" href="public/assets/css/dashstyle.css">
     <title>Sidebar With Bootstrap</title>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="http://aces-macbook-pro.local/assets/css/home.css">
+    <link rel="stylesheet" href="public/assets/css/home.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <style>
@@ -187,8 +187,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-    <script src="http://aces-macbook-pro.localAliyat@123
-    /assets/js/slides.js"></script>
+    <script src="public/assets/js/slides.js"></script>
     
     <script>
         // Initialize AOS
@@ -199,7 +198,7 @@
     <div class="container text-center">
         <p> Creator: Abdul . All rights reserved.</p>
         <p>
-            <a href="Help.php" class="text-white">Help</a> |  
+            <a href="public/help.php" class="text-white">Help</a> |  
             <a href="https://www.tradingview.com/widget-docs/widgets/" class="text-white">Copyright &copy; 2025 TradingView, Inc.</a>
         </p>
     </div>
