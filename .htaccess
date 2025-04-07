@@ -1,18 +1,4 @@
-# /public/.htaccess (for Laravel/public apps)
 RewriteEngine On
-RewriteBase /public/
-heroku config:set HTACCESS=off -a shielded-garden-06013
-
-# Force HTTPS
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Remove .php extension
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php [L]
-
-# Block access to .env
-<Files .env>
-    Deny from all
-</Files>
+RewriteRule ^(.*)$ index.php [L]
