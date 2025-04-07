@@ -1,11 +1,14 @@
 <?php
-require_once dirname(__DIR__) . '/includes/db.php';
+
+$dbPath = dirname(__DIR__) . '/includes/db.php';
+if (!file_exists($dbPath)) {
+    die("Critical error : db config missin: " . $dbPath);
+}
+require_once $dbPath;
 
 //errors from login.php
 $error = $_SESSION['error'] ?? null;
 unset($_SESSION['error']);
-
-$conn = get_db_connection();
 ?>
 <!DOCTYPE html>
 <html lang="en">
