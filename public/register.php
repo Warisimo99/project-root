@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'includes/db.php'); 
+require_once(__DIR__.'/includes/db.php'); 
 
 //errors from login.php
 $error = $_SESSION['error'] ?? null;

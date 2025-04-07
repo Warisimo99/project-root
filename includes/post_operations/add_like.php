@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('includes/db.php');
+require_once(__DIR__.'/includes/db.php'); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the user is logged in
