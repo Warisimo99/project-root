@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('/db.php');
+include('includes/db.php');
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

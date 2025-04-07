@@ -1,6 +1,8 @@
 <?php
-require_once 'includes/config.php';
-require_once('db.php');
+
+session_start();
+
+include('includes/db.php');
 
 // Check if the connection was successful
 if (!$conn) {
@@ -13,7 +15,7 @@ $result = mysqli_query($conn, $sql);
 
 
 foreach ($posts as &$post) {
-    $post['image_url'] = '/public/images/' . $post['image'];
+    $post['image_url'] = 'includes/public/images/' . $post['image'];
 }
 
 if (!$result) {
