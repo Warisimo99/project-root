@@ -74,7 +74,7 @@ session_start();
                 <p>Your platform for market updates,</p>
                 </b></b> 
                 <p>trading insights and community posts.</p>
-                <a href="register.php" class="hero-button">Get Started</a>
+                <a href="public/register.php" class="hero-button">Get Started</a>
             </div>
             <div class="hero-image"></div>
         </div>
