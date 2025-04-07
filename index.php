@@ -1,10 +1,11 @@
 <?php
-// config.php
-ini_set('session.cookie_secure', 1);
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_samesite', 'Lax');
-session_start(); // Start session here or later in individual files
 
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// Start the session
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
