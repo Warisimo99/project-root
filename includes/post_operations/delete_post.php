@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__.'public/includes/db.php'); 
+require_once(__DIR__.'project-root/includes/db.php'); 
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
