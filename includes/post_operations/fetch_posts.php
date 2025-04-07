@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once(__DIR__.'/includes/db.php'); 
+require_once '/includes/db.php';
 
 // Check if the connection was successful
 if (!$conn) {

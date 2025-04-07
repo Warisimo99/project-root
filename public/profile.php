@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include(__DIR__.'/includes/db.php');
+require_once '/includes/db.php';
 
 // Fetch the user's posts
     $user_id = $_SESSION['user_id'];

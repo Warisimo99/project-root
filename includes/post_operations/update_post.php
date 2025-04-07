@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__.'/includes/db.php');    // Include your database connection file
+require_once '/includes/db.php';    // Include your database connection file
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
