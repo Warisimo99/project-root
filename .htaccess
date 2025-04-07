@@ -1,6 +1,7 @@
 # /public/.htaccess (for Laravel/public apps)
 RewriteEngine On
 RewriteBase /public/
+heroku config:set HTACCESS=off -a shielded-garden-06013
 
 # Force HTTPS
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
