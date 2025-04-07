@@ -1,4 +1,11 @@
 <?php
+define('DB_CONFIG_PATH' , dirname(__DIR__) . '/includes/db.php');
+
+if (!file_exists(DB_CONFIG_PATH)) {
+    die("CRITICAL: Database config missing at " . DB_CONFIG_PATH);
+}
+
+
 function get_db_connection() {
     $db_server = "if0ck476y7axojpg.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
     $db_user = "qcy2v5juybnpxza9";
@@ -14,6 +21,12 @@ function get_db_connection() {
     return $conn;
 }
 
+$GLOBALS['DB_CONNECTION'] = get_db_connection();
 
-$conn = get_db_connection();
+if (!$GLOBALS['DB_CONNECTION']->PING()) {
+    error_log("Database connection lost");
+    $GLOBALS['DB_CONNECTION'] = get_db_connection();
+}
+
+
 ?>
