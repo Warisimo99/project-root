@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__.'project-root/includes/db.php'); 
+require_once(__DIR__.'app/includes/db.php'); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if the user is logged in
