@@ -81,7 +81,7 @@ if (!$conn) {
 
     <div class="container" id="signin">
         <h1 class= "form-title">Sign In</h1>
-        <form method="post" action="includes/user/login.php" id= "signin" > 
+        <form method="post" action="/includes/user/login.php" id= "signin" > 
             
         <div class="input-group">
                 <input type="email" name="email" id="email"  placeholder="Email" required>
