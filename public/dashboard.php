@@ -7,7 +7,21 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-require_once '/../includes/db.php';
+$db_path = __DIR__ . '/../includes/db.php';
+error_log("looking at: . $db_path");
+
+if(!file_exists($db_path)) {
+    die(json_encode([
+        'error' => 'Database config missing',
+        'debug' => [
+            'current_dir' => __DIR__,
+            'attempted_path' => $db_path,
+            'file_exists' => file_exists($db_path)
+        ]
+        ]));
+}
+
+require_once $db_path;
 
 // Debug Check database connection
 if (!$conn) {
