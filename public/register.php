@@ -1,6 +1,6 @@
 <?php
 
-require_once '/app/includes/db.php';
+require_once '/../db.php';
 
 if (!isset($GLOBALS['DB_CONNECTION'])) {
     die("Database not initialized");

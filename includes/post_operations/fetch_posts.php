@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once 'app/includes/db.php';
+require_once '/db.php';
 
 // Check if the connection was successful
 if (!$conn) {
