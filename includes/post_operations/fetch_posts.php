@@ -2,10 +2,10 @@
 
 session_start();
 
-require_once '/../../db.php';
+require_once '/../db.php';
 
 // Check if the connection was successful
-if (!$GLOBALS) {
+if (!$conn) {
     die(json_encode(['error' => 'Database connection failed: ' . mysqli_connect_error()]));
 }
 
