@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-require_once '/includes/db.php';
+require_once '/../includes/db.php';
 
 // Debug Check database connection
 if (!$conn) {
