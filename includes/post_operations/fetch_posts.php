@@ -5,7 +5,7 @@ session_start();
 require_once '/../db.php';
 
 // Check if the connection was successful
-if (!$conn) {
+if (!$GLOBALS) {
     die(json_encode(['error' => 'Database connection failed: ' . mysqli_connect_error()]));
 }
 
