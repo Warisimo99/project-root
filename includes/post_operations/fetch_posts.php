@@ -20,7 +20,7 @@ $result = mysqli_query($conn, $sql);
 
 if ($posts) {
     foreach ($posts as &$post) {
-        $post['image_url'] = 'includes/public/images/' . $post['image'];
+        $post['image_url'] = '/../public/images/' . $post['image'];
     }
 }
 
