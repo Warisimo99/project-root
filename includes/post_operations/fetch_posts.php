@@ -7,22 +7,12 @@ error_log("File exists:".(file_exists($resolved_path) ? 'Yes' : 'No'));
 require_once $resolved_path;
 
 
-$baseUrl = 'http://' . $_SERVER['HTTP_HOST']; // or https:// if using SSL
-$imageWebPath = '/assets/images/';
-$imageDirPath = $_SERVER['DOCUMENT_ROOT'] . $imageWebPath;
-
-foreach ($posts as &$post) {
-    $filename = basename($post['image']);
-    $fullPath = $imageDirPath . $filename;
-    
-    // Check if file exists before creating URL
-    if (file_exists($fullPath)) {
-        $post['image_url'] = $baseUrl . $imageWebPath . $filename;
-    } else {
-        // Log missing images but don't break the response
-        error_log("Missing image: " . $fullPath);
-        $post['image_url'] = $baseUrl . '/assets/images/default.jpg'; // fallback image
-    }
+// To this (for debugging):
+$imagePath = '/assets/images/' . basename($post['image']);
+$absolutePath = $_SERVER['DOCUMENT_ROOT'] . $imagePath;
+error_log("Trying to access image at: " . $absolutePath);
+error_log("Image exists: " . (file_exists($absolutePath) ? 'Yes' : 'No'));
+$post['image_url'] = $imagePath;
 
 // Check if the connection was successful
 if (!$conn) {
@@ -55,5 +45,4 @@ foreach ($posts as &$post) {
 // Return the posts as JSON
 header('Content-Type: application/json');
 echo json_encode($posts);
-}
 ?>
