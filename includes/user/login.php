@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 session_start();
 
 
-$db_path = __DIR__ . '/../includes/db.php';
+$db_path = __DIR__ . '/../../includes/db.php';
 error_log("looking at: . $db_path");
 
 if(!file_exists($db_path)) {
