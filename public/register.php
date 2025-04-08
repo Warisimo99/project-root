@@ -15,8 +15,9 @@ if(!file_exists($db_path)) {
 
 require_once $db_path;
 
-if (!isset($GLOBALS['DB_CONNECTION'])) {
-    die("Database not initialized");
+$conn = get_db_connection();
+if (!$conn) {
+    die("Database connection failed");
 }
 
 ?>
