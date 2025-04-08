@@ -7,21 +7,8 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-$db_path = __DIR__ . '/../includes/db.php';
-error_log("looking at: . $db_path");
-
-if(!file_exists($db_path)) {
-    die(json_encode([
-        'error' => 'Database config missing',
-        'debug' => [
-            'current_dir' => __DIR__,
-            'attempted_path' => $db_path,
-            'file_exists' => file_exists($db_path)
-        ]
-        ]));
-}
-
-require_once $db_path;
+$resolved_path = __DIR__ . '/../db.php';
+require_once '$resolved_path';
 
 // Debug Check database connection
 if (!$conn) {
@@ -312,7 +299,7 @@ if ($rowCount > 0) {
     </div>
 
     <script type="module">
-        import { initializeSpinner } from '/assets/js/spinner.js';
+        import { initializeSpinner } from '/../assets/js/spinner.js';
         initializeSpinner();
     </script>
 
