@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/app/includes/db.php';
+require_once (__DIR__ . '/app/includes/db.php');
 
 if (!isset($GLOBALS['DB_CONNECTION'])) {
     die("Database not initialized");
