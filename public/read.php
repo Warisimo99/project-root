@@ -179,7 +179,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
     </div>
 
     <script type="module">
-        import { initializeSpinner } from '/assets/js/spinner.js';
+        import { initializeSpinner } from '/../assets/js/spinner.js';
         initializeSpinner();
     </script>
 </body>
