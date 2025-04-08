@@ -1,26 +1,19 @@
 <?php
-$debug_info = [
-    '__DIR__' => __DIR__,
-    'cwd' => getcwd(),
-    'script' => $_SERVER['SCRIPT_FILENAME']
-];
+$db_path = __DIR__ . '/../includes/db.php';
+error_log("looking at: . $db_path");
 
-$possible_paths = [
-    __DIR__ . '/../includes/db.php',
-    __DIR__ . '/../../includes/db.php',
-    dirname(__DIR__, 2) . '/includes/db.php',
-    $_SERVER['DOCUMENT_ROOT'] . '/includes/db.php'
-];
-require_once '/../db.php';
-
-foreach ($possible_paths as $path) {
-    if (file_exists($path)) {
-        require_once $path;
-        $debug_info['db_loaded'] = $path;
-        break;
-    }
-    $debug_info['attmepted_paths'][$path] = file_exists($path);
+if(!file_exists($db_path)) {
+    die(json_encode([
+        'error' => 'Database config missing',
+        'debug' => [
+            'current_dir' => __DIR__,
+            'attempted_path' => $db_path,
+            'file_exists' => file_exists($db_path)
+        ]
+        ]));
 }
+
+require_once $db_path;
 
 if (!isset($GLOBALS['DB_CONNECTION'])) {
     die("Database not initialized");
