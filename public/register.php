@@ -1,6 +1,26 @@
 <?php
+$debug_info = [
+    '__DIR__' => __DIR__,
+    'cwd' => getcwd(),
+    'script' => $_SERVER['SCRIPT_FILENAME']
+];
 
+$possible_paths = [
+    __DIR__ . '/../includes/db.php',
+    __DIR__ . '/../../includes/db.php',
+    dirname(__DIR__, 2) . '/includes/db.php',
+    $_SERVER['DOCUMENT_ROOT'] . '/includes/db.php'
+];
 require_once '/../db.php';
+
+foreach ($possible_paths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $debug_info['db_loaded'] = $path;
+        break;
+    }
+    $debug_info['attmepted_paths'][$path] = file_exists($path);
+}
 
 if (!isset($GLOBALS['DB_CONNECTION'])) {
     die("Database not initialized");
