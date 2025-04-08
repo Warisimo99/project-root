@@ -16,5 +16,6 @@ function get_db_connection() {
 
 
 
-$conn = get_db_connection();
+// Global connection
+$GLOBALS['DB_CONNECTION'] = get_db_connection();
 ?>

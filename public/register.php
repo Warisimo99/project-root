@@ -1,10 +1,11 @@
 <?php
 
-require_once dirname(__DIR__) . '/public/autoload.php';
+require_once __DIR__ . '/app/includes/db.php';
 
-//errors from login.php
-$error = $_SESSION['error'] ?? null;
-unset($_SESSION['error']);
+if (!isset($GLOBALS['DB_CONNECTION'])) {
+    die("Database not initialized");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
