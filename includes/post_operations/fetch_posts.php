@@ -21,25 +21,28 @@ if (!$result) {
 
 $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-// Process image URLs
-foreach ($posts as &$post) {
-    // For Heroku deployment
-    $imageFilename = basename($post['image']);
-    $imageWebPath = '/assets/images/' . $imageFilename;
-    
-    // Debugging - log the generated path
-    error_log("Generated image path: " . $imageWebPath);
-    
-    $post['image_url'] = $imageWebPath;
-    
-    // Format date
-    $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
-    
-    // Truncate content for preview
-    $post['excerpt'] = substr($post['content'], 0, 150) . (strlen($post['content']) > 150 ? '...' : '');
+if (!is_array($posts)) {
+    $posts = [];
 }
+
+foreach ($posts as &$post) {
+    // Add null check for $post['image']
+    if (!empty($post['image'])) {
+        $filename = basename($post['image']);
+        $post['image_url'] = '/assets/images/' . basename($post['image']);
+        
+        // Debugging - verify the path
+        $absolutePath = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/images/' . basename($post['image']);
+        error_log("Checking image at: " . $absolutePath);
+        error_log("Image exists: " . (file_exists($absolutePath) ? 'Yes' : 'No'));
+    } else {
+        $post['image_url'] = ''; // or a default image
+        error_log("Empty image path for post ID: " . $post['id']);
+    }
 
 // Return the posts as JSON
 header('Content-Type: application/json');
 echo json_encode($posts);
+
+}
 ?>
