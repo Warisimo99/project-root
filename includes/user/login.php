@@ -144,7 +144,7 @@ if (isset($_POST['signUp'])) {
                     $_SESSION['lname'] = $row['lname'];
 
                     // Redirect to dashboard
-                    header("Location: /dashboard.php");
+                    header("Location: /../dashboard.php");
                     //$_SESSION['success'] = "Registration successful! Your email has been confirmed.";
                     exit();
                 } else {
@@ -160,7 +160,7 @@ if (isset($_POST['signUp'])) {
         $stmt->close();
     }
 
-    header("Location: /register.php");
+    header("Location: /../register.php");
     exit(); 
 }
 ?>
