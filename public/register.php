@@ -1,12 +1,5 @@
 <?php
-
-$dbPath = dirname(__DIR__) . '/includes/db.php';
-
-if (!file_exists($dbPath)) {
-    die("Critical error : db config missin: " . $dbPath);
-}
-
-require_once $dbPath;
+require_once __DIR__ .  '/includes/db.php';
 
 //errors from login.php
 $error = $_SESSION['error'] ?? null;
