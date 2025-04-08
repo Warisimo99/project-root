@@ -14,18 +14,28 @@ if (!$conn) {
     die(json_encode(['error' => 'Database connection failed: ' . mysqli_connect_error()]));
 }
 
-// Fetch posts from the database
-$sql = "SELECT id, title, image FROM posts ORDER BY created_at DESC";
+// Fetch posts
+$sql = "SELECT id, title, image, content, created_at FROM posts ORDER BY created_at DESC";
 $result = mysqli_query($conn, $sql);
 
-if ($posts) {
-    foreach ($posts as &$post) {
-        $post['image_url'] = '/../public/images/' . $post['image'];
-    }
+if (!$result) {
+    header('Content-Type: application/json');
+    die(json_encode(['error' => 'Query failed: ' . mysqli_error($conn)]));
 }
 
-// Fetch all rows as an associative array
 $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+// Process image URLs
+foreach ($posts as &$post) {
+    // Use absolute web path (no /../ in URLs)
+    $post['image_url'] = '/assets/images/' . basename($post['image']);
+    
+    // Format date
+    $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
+    
+    // Truncate content for preview
+    $post['excerpt'] = substr($post['content'], 0, 150) . (strlen($post['content']) > 150 ? '...' : '');
+}
 
 // Return the posts as JSON
 header('Content-Type: application/json');
