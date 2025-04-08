@@ -183,7 +183,7 @@ session_start();
     </div>
 
     <script type="module">
-        import { initializeSpinner } from 'public/assets/js/spinner.js';
+        import { initializeSpinner } from '/../public/assets/js/spinner.js';
         initializeSpinner();
     </script>
 
@@ -195,7 +195,7 @@ session_start();
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-    <script src="/assets/js/slides.js"></script>
+    <script src="public/assets/js/slides.js"></script>
     
     <script>
         // Initialize AOS
