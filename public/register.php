@@ -48,7 +48,7 @@ if (!$conn) {
         <?php endif; ?>
         
         <h1 class= "form-title">Register</h1>
-        <form method="post" action="/includes/user/login.php" id= "signup" > 
+        <form method="post" action="/../includes/user/login.php" id= "signup" > 
             <div class= "input-group">
                 <input type="text" name="fname" id="fname" placeholder="First Name" required>
                 <label for="fname">First Name</label>
@@ -81,7 +81,7 @@ if (!$conn) {
 
     <div class="container" id="signin">
         <h1 class= "form-title">Sign In</h1>
-        <form method="post" action="/includes/user/login.php" id= "signin" > 
+        <form method="post" action="/../includes/user/login.php" id= "signin" > 
             
         <div class="input-group">
                 <input type="email" name="email" id="email"  placeholder="Email" required>
