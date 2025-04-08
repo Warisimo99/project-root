@@ -7,7 +7,15 @@ error_log("File exists:".(file_exists($resolved_path) ? 'Yes' : 'No'));
 require_once $resolved_path;
 
 
-$posts = [];
+// Change this line:
+$post['image_url'] = '/assets/images/' . basename($post['image']);
+
+// To this (for debugging):
+$imagePath = '/assets/images/' . basename($post['image']);
+$absolutePath = $_SERVER['DOCUMENT_ROOT'] . $imagePath;
+error_log("Trying to access image at: " . $absolutePath);
+error_log("Image exists: " . (file_exists($absolutePath) ? 'Yes' : 'No'));
+$post['image_url'] = $imagePath;
 
 // Check if the connection was successful
 if (!$conn) {
@@ -28,7 +36,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // Process image URLs
 foreach ($posts as &$post) {
     // Use absolute web path (no /../ in URLs)
-    $post['image_url'] = '/assets/images/' . basename($post['image']);
+    $post['image_url'] = 'public/assets/images/' . basename($post['image']);
     
     // Format date
     $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
