@@ -1,62 +1,48 @@
-# Disable directory listing and MultiViews
-Options -Indexes -MultiViews
-
-# Allow cross-origin requests (for CDN/embeds)
-<IfModule mod_headers.c>
-    Header set Access-Control-Allow-Origin "*"
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect /public/images/ to /assets/images/
+    RewriteRule ^public/images/(.*)$ /assets/images/$1 [L,R=301]
+    
+    # Redirect direct image requests to proper location
+    RewriteCond %{REQUEST_URI} ^/images/(.*)$
+    RewriteRule ^(.*)$ /assets/images/%1 [L]
 </IfModule>
 
-# Image file handling (combined single section)
-<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg)$">
-    # Allow public access
+# Image handling - critical fixes
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    # Fix typo in 'Require' and set proper permissions
     Require all granted
+    Allow from all
     
-    # Cache for 1 month (30 days)
-    Header set Cache-Control "max-age=2592000, public, immutable"
+    # Cache settings
+    Header set Cache-Control "public, max-age=604800, immutable"
     
     # Security headers
     Header set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
     
-    # Remove ETags to prevent inconsistent caching
-    Header unset ETag
-    FileETag None
+    # Force correct MIME types
+    ForceType image/jpeg
+    ForceType image/png
+    ForceType image/gif
+    ForceType image/webp
 </FilesMatch>
 
-# Prevent execution of scripts in upload directories
-<FilesMatch "\.(php|cgi|pl|sh|exe)$">
-    Require all denied
-</FilesMatch>
-
-# Force proper MIME types
-<IfModule mod_mime.c>
-    AddType image/webp .webp
-    AddType image/svg+xml .svg
-</IfModule>
-
-# URL rewriting - Front Controller pattern
+# Front controller pattern
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # Redirect to HTTPS first
-    RewriteCond %{HTTPS} off
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-    
-    # Handle front controller
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# Security enhancements
+# Security enhancements (simplified)
 <IfModule mod_headers.c>
-    # Prevent content type sniffing
-    Header always set X-Content-Type-Options "nosniff"
-    
-    # Enable XSS protection
-    Header always set X-XSS-Protection "1; mode=block"
-    
-    # Prevent MIME type confusion
-    Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:;"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:"
+    Header unset ETag
+    FileETag None
 </IfModule>
+
+# Disable directory browsing
+Options -Indexes -MultiViews
