@@ -1,43 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Redirect /assets/images/ to /public/assets/images/
-    RewriteRule ^assets/images/(.*)$ public/assets/images/$1 [L,R=301]
-    
-    # Block direct /app/ access
+    # Prevent direct /app/ access
     RewriteRule ^app/ - [F]
-</IfModule>
-
-<IfModule mod_headers.c>
-    # Force correct MIME types for images
-    <FilesMatch "\.(jpg|jpeg)$">
-        Header set Content-Type "image/jpeg"
-        Header set X-Content-Type-Options "nosniff"
-        Header unset Content-Type
-        Header set Content-Type "image/jpeg"
-    </FilesMatch>
     
-    <FilesMatch "\.(png)$">
-        Header set Content-Type "image/png"
-        Header set X-Content-Type-Options "nosniff"
-        Header unset Content-Type
-        Header set Content-Type "image/png"
-    </FilesMatch>
+    # Ensure assets are served
+    RewriteRule ^public/assets/images/(.*)$ - [L]
     
-    <FilesMatch "\.(gif)$">
-        Header set Content-Type "image/gif"
-        Header set X-Content-Type-Options "nosniff"
-        Header unset Content-Type
-        Header set Content-Type "image/gif"
-    </FilesMatch>
-    
-    <FilesMatch "\.(webp)$">
-        Header set Content-Type "image/webp"
-        Header set X-Content-Type-Options "nosniff"
-        Header unset Content-Type
-        Header set Content-Type "image/webp"
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        # Force correct Content-Type
+        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
+        Header set Content-Type "image/png" env=!REDIRECT_content-type
+        Header set Content-Type "image/gif" env=!REDIRECT_content-type
+        Header set Content-Type "image/webp" env=!REDIRECT_content-type
     </FilesMatch>
 </IfModule>
-
-# Disable mod_negotiation's type guessing
-Options -MultiViews
