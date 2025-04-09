@@ -180,35 +180,32 @@ if ($rowCount > 0) {
                 <h2 class="btn btn-outline-light centered-heading">Trending Posts</h2>
             </div>
             <?php if (!empty($trendingPosts)): ?>
-                <div class="row">
-                    <?php foreach ($trendingPosts as $post): ?>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100"> <!-- Added h-100 for equal height cards -->
-                                <?php if (!empty($post['image'])): ?>
-                                    <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" 
-                                        class="card-img-top" 
-                                        alt="<?php echo htmlspecialchars($post['title']); ?>"
-                                        onerror="this.src='/assets/images/default.jpg'">
-                                <?php else: ?>
-                                    <img src="/assets/images/default.jpg" class="card-img-top" alt="Default Image">
-                                <?php endif; ?>
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
-                                    <p class="card-text"><?php echo htmlspecialchars($post['summary']); ?></p>
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            <i class="fas fa-thumbs-up"></i> <?php echo $post['like_count']; ?> 
-                                        </small>
-                                    </p>
-                                    <a href="read.php?id=<?php echo $post['id']; ?>" class="btn btn-primary">Read More</a>
-                                </div>
+            <div class="row">
+                <?php foreach ($trendingPosts as $post): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100"> <!-- Added h-100 for equal height cards -->
+                            <?php if (!empty($post['image'])): ?>
+                                <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" 
+                                    class="card-img-top" 
+                                    alt="<?php echo htmlspecialchars($post['title']); ?>">
+                            <?php endif; ?>
+                            <div class="card-body d-flex flex-column"> <!-- Added flex column layout -->
+                                <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($post['summary']); ?></p>
+                                <p class="card-text mt-auto"> <!-- Pushed to bottom -->
+                                    <small class="text-muted">
+                                        <i class="fas fa-thumbs-up"></i> <?php echo $post['like_count']; ?> 
+                                    </small>
+                                </p>
+                                <a href="read.php?id=<?php echo $post['id']; ?>" class="btn btn-primary mt-2">Read More</a>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <p class="text-center">No trending posts found.</p>
-            <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center">No trending posts found.</p>
+        <?php endif; ?>
         </div>
     </div>
     <div style="display: flex; justify-content: center; padding: 20px;">
