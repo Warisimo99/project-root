@@ -27,20 +27,15 @@ if (!is_array($posts)) {
 
 // Process image URLs
 foreach ($posts as &$post) {
-    // For Heroku deployment
-    $imageFilename = basename($post['image']);
-    $imageWebPath = '/assets/images/' . $imageFilename;
-    
-    // Debugging - log the generated path
-    error_log("Generated image path: " . $imageWebPath);
-    
-    $post['image_url'] = $imageWebPath;
-    
-    // Format date
-    $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
-    
-    // Truncate content for preview
-    $post['excerpt'] = substr($post['content'], 0, 150) . (strlen($post['content']) > 150 ? '...' : '');
+    if (!empty($post['image'])) {
+        $safe_name = rawurlencode(basename($post['image']));
+        $post['image_url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/assets/images/' . $safe_name;
+        
+        // Debugging
+        error_log("Serving image from: " . $post['image_url']);
+    } else {
+        $post['image_url'] = ''; // Or your default image URL
+    }
 }
 
 // Return the posts as JSON
