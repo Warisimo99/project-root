@@ -1,11 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
+    # Remove /app/ from any URLs
+    RewriteCond %{REQUEST_URI} ^/app/(.*)
+    RewriteRule ^(.*)$ /%1 [L,R=301]
+    
     # Redirect old /public/images/ to /public/assets/images/
     RewriteRule ^public/images/(.*)$ public/assets/images/$1 [L,R=301]
-    
-    # Block direct /app/ access
-    RewriteRule ^app/ - [F]
 
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
