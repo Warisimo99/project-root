@@ -27,7 +27,7 @@ if (!is_array($posts)) {
 
 foreach ($posts as &$post) {
     if (!empty($post['image'])) {
-        $post['image_url'] = '/assets/images/' . rawurlencode(basename($post['image']));
+        $post['image'] = '/public/assets/images/' . rawurlencode(basename($post['image']));
     }
     // No else clause for default images
     else {
