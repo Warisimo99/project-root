@@ -1,12 +1,17 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Redirect /assets/ to /public/assets/
-    RewriteRule ^assets/(.*)$ public/assets/$1 [L,R=301]
+    # Remove /app/ from any URLs
+    RewriteCond %{REQUEST_URI} ^/app/(.*)
+    RewriteRule ^(.*)$ /%1 [L,R=301]
     
-    # Ensure images are served with correct MIME type
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L,R=301]
+
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-        Header set Content-Type "image/%{MATCH_EXT}e"
-        Require all granted
+        # Force correct Content-Type
+        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
+        Header set Content-Type "image/png" env=!REDIRECT_content-type
+        Header set Content-Type "image/gif" env=!REDIRECT_content-type
+        Header set Content-Type "image/webp" env=!REDIRECT_content-type
     </FilesMatch>
 </IfModule>
