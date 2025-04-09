@@ -1,11 +1,8 @@
-RewriteEngine On
-
-# Redirect old `/public/images/` paths to `/assets/images/`
-RewriteRule ^public/images/(.*)$ assets/images/$1 [L,NC,R=301]
-
-# Ensure files are served from `/assets/images/`
-RewriteCond %{REQUEST_URI} ^/images/ [NC]
-RewriteRule ^images/(.*)$ assets/images/$1 [L,NC]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Redirect old image paths
+    RewriteRule ^images/(.*)$ assets/images/$1 [L,R=301]
+</IfModule>
 
 # Fix image MIME types
 <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
