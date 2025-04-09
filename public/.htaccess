@@ -1,29 +1,43 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Redirect all image requests to correct path
-    RewriteCond %{REQUEST_URI} ^/assets/images/(.*)$
-    RewriteRule ^(.*)$ /public/assets/images/%1 [L]
+    # Redirect /assets/images/ to /public/assets/images/
+    RewriteRule ^assets/images/(.*)$ public/assets/images/$1 [L,R=301]
     
     # Block direct /app/ access
     RewriteRule ^app/ - [F]
-    
-    # Handle direct requests to public/assets
-    RewriteRule ^public/assets/images/(.*)$ - [L]
 </IfModule>
 
-<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-    # Force correct MIME types
-    Header set Content-Type "image/%{MATCH_EXT}e"
-    Header set Cache-Control "public, max-age=604800"
+<IfModule mod_headers.c>
+    # Force correct MIME types for images
+    <FilesMatch "\.(jpg|jpeg)$">
+        Header set Content-Type "image/jpeg"
+        Header set X-Content-Type-Options "nosniff"
+        Header unset Content-Type
+        Header set Content-Type "image/jpeg"
+    </FilesMatch>
     
-    # Security headers
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "SAMEORIGIN"
+    <FilesMatch "\.(png)$">
+        Header set Content-Type "image/png"
+        Header set X-Content-Type-Options "nosniff"
+        Header unset Content-Type
+        Header set Content-Type "image/png"
+    </FilesMatch>
     
-    # Allow access
-    Require all granted
-</FilesMatch>
+    <FilesMatch "\.(gif)$">
+        Header set Content-Type "image/gif"
+        Header set X-Content-Type-Options "nosniff"
+        Header unset Content-Type
+        Header set Content-Type "image/gif"
+    </FilesMatch>
+    
+    <FilesMatch "\.(webp)$">
+        Header set Content-Type "image/webp"
+        Header set X-Content-Type-Options "nosniff"
+        Header unset Content-Type
+        Header set Content-Type "image/webp"
+    </FilesMatch>
+</IfModule>
 
-# Disable directory listing
-Options -Indexes
+# Disable mod_negotiation's type guessing
+Options -MultiViews
