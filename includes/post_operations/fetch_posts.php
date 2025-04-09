@@ -26,9 +26,9 @@ if (!is_array($posts)) {
 }
 
 foreach ($posts as &$post) {
-    if (!empty($post['image'])) {
+    if (!empty($post['image_url'])) {
         // Ensure proper URL encoding for filenames
-        $filename = rawurlencode(basename($post['image']));
+        $filename = rawurlencode(basename($post['image_url']));
         
         // Use absolute web path (no /public in URL)
         $post['image_url'] = '/assets/images/' . $filename;

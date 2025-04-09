@@ -176,7 +176,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <?php foreach ($posts as $post): ?>
                                 <div class="col-md-4 mb-4">
                                     <div class="card h-100">
-                                        <?php if (!empty($post['image'])): ?>
+                                        <?php if (!empty($post['image_url'])): ?>
                                             <img src="<?php echo htmlspecialchars($post['image_url'] ?? '/assets/images/default.jpg'); ?>" class="card-img-top" alt="Post Image">
                                         <?php else: ?>
                                             <img src="https://via.placeholder.com/300" class="card-img-top" alt="Placeholder Image">
