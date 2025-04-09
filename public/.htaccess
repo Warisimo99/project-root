@@ -6,3 +6,6 @@
     Header set Content-Type "image/gif" env=!REDIRECT_content-type
     Header set Content-Type "image/webp" env=!REDIRECT_content-type
 </FilesMatch>
+
+# Force error to test if .htaccess is processed
+InvalidDirective Test
