@@ -27,23 +27,11 @@ if (!is_array($posts)) {
 
 foreach ($posts as &$post) {
     if (!empty($post['image'])) {
-        // Ensure proper URL encoding for filenames
-        $filename = rawurlencode(basename($post['image']));
-        
-        // Use absolute web path (no /public in URL)
-        $post['image'] = '/assets/images/' . $filename;
-        
-        // Debug logging
-        error_log("Generated image URL: " . $post['image']);
-        
-        // Fallback if image doesn't exist
-        $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/images/' . basename($post['image']);
-        if (!file_exists($absolute_path)) {
-            $post['image_url'] = '/assets/images/default.jpg';
-            error_log("Image missing: " . $post['image']);
-        }
-    } else {
-        $post['image'] = '/assets/images/default.jpg';
+        $post['image_url'] = '/assets/images/' . rawurlencode(basename($post['image']));
+    }
+    // No else clause for default images
+    else {
+        $post['image'] = '/assets/images/';
     }
     
     // Format other post data
