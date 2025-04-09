@@ -186,8 +186,7 @@ if ($rowCount > 0) {
                         <div class="card h-100"> <!-- Added h-100 for equal height cards -->
                             <?php if (!empty($post['image'])): ?>
                                 <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" 
-                                    class="card-img-top" 
-                                    alt="<?php echo htmlspecialchars($post['title']); ?>">
+                                    class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
                             <?php endif; ?>
                             <div class="card-body d-flex flex-column"> <!-- Added flex column layout -->
                                 <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
