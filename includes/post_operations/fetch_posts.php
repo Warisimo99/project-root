@@ -31,10 +31,10 @@ foreach ($posts as &$post) {
         $filename = rawurlencode(basename($post['image']));
         
         // Use absolute web path (no /public in URL)
-        $post['image_url'] = '/assets/images/' . $filename;
+        $post['image'] = '/assets/images/' . $filename;
         
         // Debug logging
-        error_log("Generated image URL: " . $post['image_url']);
+        error_log("Generated image URL: " . $post['image']);
         
         // Fallback if image doesn't exist
         $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/images/' . basename($post['image']);
@@ -43,7 +43,7 @@ foreach ($posts as &$post) {
             error_log("Image missing: " . $post['image']);
         }
     } else {
-        $post['image_url'] = '/assets/images/default.jpg';
+        $post['image'] = '/assets/images/default.jpg';
     }
     
     // Format other post data
