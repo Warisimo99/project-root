@@ -105,7 +105,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                 <h1 class="text-center mb-4"><?php echo htmlspecialchars($post['title']); ?></h1>
 
                <!-- Post Image -->
-               <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($post['title']); ?>">
+               <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>">
 
                 <!-- Post Details -->
                 <div class="card">
