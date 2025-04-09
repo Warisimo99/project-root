@@ -25,16 +25,27 @@ if (!is_array($posts)) {
     $posts = [];
 }
 
-// Process image URLs
 foreach ($posts as &$post) {
     if (!empty($post['image'])) {
-        $safe_name = rawurlencode(basename($post['image']));
-        $post['image_url'] = 'https://' . $_SERVER['HTTP_HOST'] . '/assets/images/' . $safe_name;
+        // 1. Get clean filename and encode special characters
+        $filename = rawurlencode(basename($post['image']));
         
-        // Debugging
-        error_log("Serving image from: " . $post['image_url']);
+        // 2. Generate both web and absolute paths
+        $post['image_url'] = '/assets/images/' . $filename;
+        $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/images/' . basename($post['image']);
+        
+        // 3. Debug logging (temporary)
+        error_log("Generated URL: {$post['image_url']}");
+        error_log("Server path: {$absolute_path}");
+        error_log("File exists: " . (file_exists($absolute_path) ? 'Yes' : 'No'));
+        
+        // 4. Fallback if file doesn't exist
+        if (!file_exists($absolute_path)) {
+            $post['image_url'] = '/assets/images/default.jpg';
+            error_log("Missing image: {$post['image']}");
+        }
     } else {
-        $post['image_url'] = ''; // Or your default image URL
+        $post['image_url'] = '/assets/images/default.jpg';
     }
 }
 

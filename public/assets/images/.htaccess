@@ -4,9 +4,10 @@
     # Redirect /public/images/ to /assets/images/
     RewriteRule ^public/images/(.*)$ /assets/images/$1 [L,R=301]
     
-    # Redirect direct image requests to proper location
-    RewriteCond %{REQUEST_URI} ^/images/(.*)$
-    RewriteRule ^(.*)$ /assets/images/%1 [L]
+    # Front controller
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [L]
 </IfModule>
 
 # Image handling - critical fixes
@@ -17,6 +18,7 @@
     
     # Cache settings
     Header set Cache-Control "public, max-age=604800, immutable"
+    ErrorDocument 404 /assets/images/default.jpg
     
     # Security headers
     Header set X-Content-Type-Options "nosniff"
