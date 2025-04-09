@@ -106,7 +106,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
 
                 <!-- Post Image -->
                 <?php if (!empty($post['image'])): ?>
-                    <img src="<?php echo htmlspecialchars($post['image']); ?>" class="img-fluid mb-4" alt="Post Image">
+                    <img src="<?php echo $post['image_url']; ?>" onerror="this.src='/assets/images/default.jpg'" class="img-fluid mb-4" alt="Post Image">
                 <?php else: ?>
                     <img src="https://via.placeholder.com/800x400" class="img-fluid mb-4" alt="Placeholder Image">
                 <?php endif; ?>

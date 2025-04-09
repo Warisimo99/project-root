@@ -1,13 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Redirect /images/ to /assets/images/
-    RewriteRule ^images/(.*)$ assets/images/$1 [L,R=301]
+    # Ensure no /app/public appears in URLs
+    RewriteCond %{REQUEST_URI} ^/app/public/(.*)
+    RewriteRule ^(.*)$ /%1 [L,R=301]
     
-    # Handle direct filename requests
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([^/]+\.(jpg|jpeg|png|gif))$ assets/images/$1 [L]
+    # Handle image paths
+    RewriteRule ^assets/images/(.*)$ - [L]
 </IfModule>
 
 # Fix image MIME types
