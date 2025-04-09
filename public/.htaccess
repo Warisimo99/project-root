@@ -1,11 +1,10 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On
+     RewriteEngine On
+    # Prevent direct /app/ access
+    RewriteRule ^app/ - [F]
     
-    # Redirect all old /images/ requests
-    RewriteRule ^images/(.*)$ assets/images/$1 [L,R=301]
-    
-    # Block direct /public/ access
-    RewriteRule ^public/ - [F]
+    # Ensure assets are served
+    RewriteRule ^public/assets/images/(.*)$ - [L]
 </IfModule>
 
 
