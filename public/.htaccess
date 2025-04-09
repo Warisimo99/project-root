@@ -38,14 +38,5 @@
     RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
 
-# Security enhancements (simplified)
-<IfModule mod_headers.c>
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:"
-    Header set Content-Security-Policy "style-src 'self' 'unsafe-inline';"
-    Header unset ETag
-    FileETag None
-</IfModule>
-
 # Disable directory browsing
 Options -Indexes -MultiViews
