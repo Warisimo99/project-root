@@ -5,7 +5,7 @@ error_log("Resolved path: ".$resolved_path);
 error_log("File exists:".(file_exists($resolved_path) ? 'Yes' : 'No'));
 require_once $resolved_path;
 
-// Check if the connection was successful
+// Check connection
 if (!$conn) {
     die(json_encode(['error' => 'Database connection failed: ' . mysqli_connect_error()]));
 }
@@ -19,27 +19,25 @@ if (!$result) {
     die(json_encode(['error' => 'Query failed: ' . mysqli_error($conn)]));
 }
 
-$posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-if (!is_array($posts)) {
-    $posts = [];
-}
+$posts = mysqli_fetch_all($result, MYSQLI_ASSOC) ?: []; // Simplified empty check
 
 foreach ($posts as &$post) {
+    // Image URL handling
     if (!empty($post['image'])) {
-        $post['image'] = '/public/assets/images/' . rawurlencode(basename($post['image']));
+        // Ensure consistent path format
+        $post['image_url'] = '/public/assets/images/' . rawurlencode(basename($post['image']));
+        
+        // Debug logging
+        error_log("Image path for post {$post['id']}: {$post['image_url']}");
     }
-    // No else clause for default images
-    else {
-        $post['image'] = '/assets/images/';
-    }
+    // Remove else clause completely if you don't want default images
+    // (Your current else was setting an invalid path)
     
-    // Format other post data
+    // Post formatting
     $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
     $post['excerpt'] = substr($post['content'], 0, 150) . (strlen($post['content']) > 150 ? '...' : '');
 }
 
-// Return the posts as JSON
 header('Content-Type: application/json');
 echo json_encode($posts);
 ?>

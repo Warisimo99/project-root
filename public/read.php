@@ -104,12 +104,9 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                 <!-- Post Title -->
                 <h1 class="text-center mb-4"><?php echo htmlspecialchars($post['title']); ?></h1>
 
-                <!-- Post Image -->
-                <?php if (!empty($post['image'])): ?>
-                    <img src="<?php echo $post['image']; ?>" class="img-fluid mb-4" alt="Post Image">
-                <?php else: ?>
-                    <img src="https://via.placeholder.com/800x400" class="img-fluid mb-4" alt="Placeholder Image">
-                <?php endif; ?>
+               <!-- Post Image -->
+               <img src="<?php echo htmlspecialchars($post['image_url'] ?? 'https://via.placeholder.com/800x400'); ?>" 
+                class="img-fluid mb-4" alt="<?php echo htmlspecialchars($post['title'] ?? 'Post Image'); ?>">
 
                 <!-- Post Details -->
                 <div class="card">

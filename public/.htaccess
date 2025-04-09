@@ -1,18 +1,17 @@
 <IfModule mod_rewrite.c>
-     RewriteEngine On
-    # Prevent direct /app/ access
-    RewriteRule ^app/ - [F]
+    RewriteEngine On
     
-    # Ensure assets are served
-    RewriteRule ^public/assets/images/(.*)$ - [L]
+    # Redirect old /public/images/ to /public/assets/images/
+    RewriteRule ^public/images/(.*)$ public/assets/images/$1 [L,R=301]
+    
+    # Block direct /app/ access
+    RewriteRule ^app/ - [F]
+
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        # Force correct Content-Type
+        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
+        Header set Content-Type "image/png" env=!REDIRECT_content-type
+        Header set Content-Type "image/gif" env=!REDIRECT_content-type
+        Header set Content-Type "image/webp" env=!REDIRECT_content-type
+    </FilesMatch>
 </IfModule>
-
-
-<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-    # Force correct Content-Type
-    Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
-    Header set Content-Type "image/png" env=!REDIRECT_content-type
-    Header set Content-Type "image/gif" env=!REDIRECT_content-type
-    Header set Content-Type "image/webp" env=!REDIRECT_content-type
-</FilesMatch>
-
