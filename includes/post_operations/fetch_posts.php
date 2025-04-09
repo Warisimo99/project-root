@@ -27,26 +27,28 @@ if (!is_array($posts)) {
 
 foreach ($posts as &$post) {
     if (!empty($post['image'])) {
-        // 1. Get clean filename and encode special characters
+        // Ensure proper URL encoding for filenames
         $filename = rawurlencode(basename($post['image']));
         
-        // 2. Generate both web and absolute paths
+        // Use absolute web path (no /public in URL)
         $post['image_url'] = '/assets/images/' . $filename;
+        
+        // Debug logging
+        error_log("Generated image URL: " . $post['image_url']);
+        
+        // Fallback if image doesn't exist
         $absolute_path = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/images/' . basename($post['image']);
-        
-        // 3. Debug logging (temporary)
-        error_log("Generated URL: {$post['image_url']}");
-        error_log("Server path: {$absolute_path}");
-        error_log("File exists: " . (file_exists($absolute_path) ? 'Yes' : 'No'));
-        
-        // 4. Fallback if file doesn't exist
         if (!file_exists($absolute_path)) {
             $post['image_url'] = '/assets/images/default.jpg';
-            error_log("Missing image: {$post['image']}");
+            error_log("Image missing: " . $post['image']);
         }
     } else {
         $post['image_url'] = '/assets/images/default.jpg';
     }
+    
+    // Format other post data
+    $post['formatted_date'] = date('F j, Y', strtotime($post['created_at']));
+    $post['excerpt'] = substr($post['content'], 0, 150) . (strlen($post['content']) > 150 ? '...' : '');
 }
 
 // Return the posts as JSON

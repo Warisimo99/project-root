@@ -184,10 +184,13 @@ if ($rowCount > 0) {
                     <?php foreach ($trendingPosts as $post): ?>
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <?php if (!empty($post['image'])): ?>
-                                    <img src="<?php echo htmlspecialchars($post['image']); ?>" class="card-img-top" alt="Post Image">
+                                <?php if (!empty($post['image_url'])): ?>
+                                    <img src="<?php echo htmlspecialchars($post['image_url']); ?>" 
+                                        class="card-img-top" 
+                                        alt="<?php echo htmlspecialchars($post['title']); ?>"
+                                        onerror="this.src='/assets/images/default.jpg'">
                                 <?php else: ?>
-                                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Placeholder Image">
+                                    <img src="/assets/images/default.jpg" class="card-img-top" alt="Default Image">
                                 <?php endif; ?>
                                 <div class="card-body">
                                     <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
