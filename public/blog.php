@@ -177,7 +177,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <div class="col-md-4 mb-4">
                                     <div class="card h-100">
                                         <?php if (!empty($post['image'])): ?>
-                                            <img src="<?php echo htmlspecialchars($post['image']); ?>" class="card-img-top" alt="Post Image">
+                                            <img src="<?php echo $post['image_url']; ?>" onerror="this.src='/assets/images/default.jpg'" class="card-img-top" alt="Post Image">
                                         <?php else: ?>
                                             <img src="https://via.placeholder.com/300" class="card-img-top" alt="Placeholder Image">
                                         <?php endif; ?>

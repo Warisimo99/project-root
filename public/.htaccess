@@ -1,15 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Ensure no /app/public appears in URLs
-    RewriteCond %{REQUEST_URI} ^/app/public/(.*)
-    RewriteRule ^(.*)$ /%1 [L,R=301]
+    # Redirect all old /images/ requests
+    RewriteRule ^images/(.*)$ assets/images/$1 [L,R=301]
     
-    # Handle image paths
-    RewriteRule ^assets/images/(.*)$ - [L]
+    # Block direct /public/ access
+    RewriteRule ^public/ - [F]
 </IfModule>
 
-# Fix image MIME types
+
 <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
     # Force correct Content-Type
     Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
