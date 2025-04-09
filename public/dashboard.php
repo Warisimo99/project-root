@@ -174,18 +174,18 @@ if ($rowCount > 0) {
             </div>
             <!-- TradingView Widget END -->
 
-    <!-- Display Trending Posts -->
-    <div class="mt-5">
-    <div style="display: flex; justify-content: center; padding: 20px;">
-        <h2 class="btn btn-outline-light centered-heading">Trending Posts</h2>
-    </div>
-        <?php if (!empty($trendingPosts)): ?>
+            <!-- Display Trending Posts -->
+            <div class="mt-5">
+            <div style="display: flex; justify-content: center; padding: 20px;">
+                <h2 class="btn btn-outline-light centered-heading">Trending Posts</h2>
+            </div>
+            <?php if (!empty($trendingPosts)): ?>
                 <div class="row">
                     <?php foreach ($trendingPosts as $post): ?>
                         <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <?php if (!empty($post['image_url'])): ?>
-                                    <img src="<?php echo htmlspecialchars($post['image_url']); ?>" 
+                            <div class="card h-100"> <!-- Added h-100 for equal height cards -->
+                                <?php if (!empty($post['image'])): ?>
+                                    <img src="/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" 
                                         class="card-img-top" 
                                         alt="<?php echo htmlspecialchars($post['title']); ?>"
                                         onerror="this.src='/assets/images/default.jpg'">
