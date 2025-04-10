@@ -118,9 +118,6 @@ if ($rowCount > 0) {
         <li class="nav-item">
           <a class="nav-link" href="blog.php">Blog</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="help.php">Help</a>
-        </li>
         </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
