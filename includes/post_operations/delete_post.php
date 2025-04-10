@@ -7,13 +7,13 @@ require_once $resolved_path;
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: user/login.php");
     exit();
 }
 
 // Check if the post ID is provided
 if (!isset($_GET['id'])) {
-    header("Location: dashboard.php");
+    header("Location: public/dashboard.php");
     exit();
 }
 
@@ -31,6 +31,6 @@ if ($stmt->affected_rows > 0) {
     $_SESSION['error'] = "Failed to delete post.";
 }
 
-header("Location: post.php");
+header("Location: public/post.php");
 exit();
 ?>
