@@ -228,7 +228,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
     
-    <script type="module" src="/../assets/js/qsearch.js"></script>
+    <script type="module" src="/../public/assets/js/qsearch.js"></script>
 </body>
 <footer class="footer bg-dark text-white py-4">
     <div class="container text-center">
