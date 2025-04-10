@@ -1,8 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Redirect all incorrect paths to correct /public/assets/images/ location
-    RewriteRule ^(assets/images/|images/|public/images/)(.*)$ public/assets/images/$2 [L,R=301]
+    # Remove all /app/ and duplicate /public/ references
+    RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$
+    RewriteRule ^(.*)$ /public/%1 [L,R=301]
+    
+    # Redirect legacy paths
+    RewriteRule ^(assets/images/|images/)(.*)$ public/assets/images/$2 [L,R=301]
     
     # Security - Block direct /app/ access
     RewriteRule ^app/ - [F]
