@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($success) {
         // Redirect back to the post page
-        header("Location: read.php?id=$postId");
+        header("Location: public/read.php?id=$postId");
         exit();
     } else {
         die("Failed to add comment: " . mysqli_error($conn));

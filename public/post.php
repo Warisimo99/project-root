@@ -178,7 +178,7 @@ function getPostCount($conn, $user_id) {
     </div>
 
     <script type="module">
-        import { initializeSpinner } from '/assets/js/spinner.js';
+        import { initializeSpinner } from '/../public/assets/js/spinner.js';
         initializeSpinner();
     </script>
 

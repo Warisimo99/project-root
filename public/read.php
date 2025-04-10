@@ -177,8 +177,8 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
         </div>
     </div>
 
-    <script type="module" >
-        import { initializeSpinner } from './public/assets/js/spinner.js';
+    <script type="module">
+        import { initializeSpinner } from '/../public/assets/js/spinner.js';
         initializeSpinner();
     </script>
 </body>

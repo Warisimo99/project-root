@@ -108,7 +108,7 @@ if (!$conn) {
     <?php endif; ?>
 
 
-    <script type="module" src ="assets/js/main.js"></script>
+    <script type="module" src ="/../public/assets/js/main.js"></script>
 
 </body>
 </html>

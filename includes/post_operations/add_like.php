@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Redirect back to the post page
-    header("Location: read.php?id=$postId");
+    header("Location: public/read.php?id=$postId");
     exit();
 }
 ?>
