@@ -121,7 +121,7 @@ if (isset($_POST['signUp'])) {
     }
 
     // Redirect back to register.php
-    header("Location: public/register.php");
+    header("Location: /../public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
     // Handle Sign In
@@ -164,7 +164,7 @@ if (isset($_POST['signUp'])) {
         $stmt->close();
     }
 
-    header("Location: public/register.php");
+    header("Location: /../public/register.php");
     exit(); 
 }
 ?>
