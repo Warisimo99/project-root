@@ -179,8 +179,8 @@ function fixHerokuPath($path) {
         </div>
     </div>
 
-    <script type="module" src = 'public/assets/js/spinner.js'>
-        import { initializeSpinner } from 'public/assets/js/spinner.js';
+    <script type="module" src = 'public/assets/js'>
+        import { initializeSpinner } from 'spinner.js';
         initializeSpinner();
     </script>
 </body>
