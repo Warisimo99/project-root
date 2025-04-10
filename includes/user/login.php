@@ -30,7 +30,7 @@ use PHPMailer\PHPMailer\Exception;
 //require __DIR__ . '/path/to/PHPMailer/src/Exception.php';
 //require __DIR__ . '/path/to/PHPMailer/src/PHPMailer.php';
 //require __DIR__ . '/path/to/PHPMailer/src/SMTP.php';
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '../vendor/autoload.php';
 echo __DIR__ . '/vendor/autoload.php';
 
 
