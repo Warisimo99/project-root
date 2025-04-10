@@ -1,6 +1,9 @@
 <?php
 session_start();
-require_once '/includes/db.php';    // Include your database connection file
+$resolved_path = __DIR__ . '/../db.php';
+error_log("Resolved path: ".$resolved_path);
+error_log("File exists:".(file_exists($resolved_path) ? 'Yes' : 'No'));
+require_once $resolved_path;  // Include your database connection file
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
