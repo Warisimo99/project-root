@@ -44,7 +44,7 @@ function generateSlides(posts) {
             const isConfirmed = confirm('Are you sure you want to continue to the home page?');
             if (isConfirmed) {
                 // Redirect to the home page if the user confirms
-                window.location.href = 'register.php'; 
+                window.location.href = 'public/register.php'; 
             } else {
                 // Do nothing if the user cancels
                 console.log('User canceled the action.');
