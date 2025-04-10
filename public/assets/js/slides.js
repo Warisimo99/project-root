@@ -1,5 +1,3 @@
-// Base path to the images folder
-const IMAGE_BASE_PATH = 'public/assets/images/';
 
 // Fetch posts from the backend
 async function fetchPosts() {
