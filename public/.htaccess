@@ -1,10 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    # Prevent direct /app/ access
-    RewriteRule ^app/ - [F]
     
-    # Ensure assets are served
-    RewriteRule ^images/(.*)$ public/assets/images/$1 [L,R=301]
+    # Redirect all incorrect paths to correct /public/assets/images/ location
+    RewriteRule ^(assets/images/|images/|public/images/)(.*)$ public/assets/images/$2 [L,R=301]
+    
+    # Security - Block direct /app/ access
+    RewriteRule ^app/ - [F]
     
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
