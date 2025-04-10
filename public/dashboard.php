@@ -294,12 +294,6 @@ if ($rowCount > 0) {
           </div>
       </div>
     </div>
-        <div style="display: flex; justify-content: flex-end; padding-top: 30px; padding: 20px;">
-             <!-- myfxbook.com Top News widget - Start -->
-             <iframe src="https://widget.myfxbook.com/widget/news.html" style="border: 0; width:100%; height: 600px;"></iframe>
-        <!-- myfxbook.com Top News widget - End -->
-        </div>
-    
         <!-- TradingView Widget END -->
     </main>
     <div id="spinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 1000;">

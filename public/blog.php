@@ -183,7 +183,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                             <img src="https://via.placeholder.com/300" class="card-img-top" alt="Placeholder Image">
                                         <?php endif; ?>
 
-                                        
+
                                         <div class="card-body">
                                             <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
                                             <p class="card-text"><strong>Author:</strong> <?php echo htmlspecialchars($post['fname']); ?></p>
@@ -220,7 +220,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </div>
 
     <script type="module">
-        import { initializeSpinner } from '/assets/js/spinner.js';
+        import { initializeSpinner } from 'public/assets/js/spinner.js';
         initializeSpinner();
     </script>
 
@@ -228,7 +228,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
     
-    <script type="module" src="/assets/js/qsearch.js"></script>
+    <script type="module" src="public/assets/js/qsearch.js"></script>
 </body>
 <footer class="footer bg-dark text-white py-4">
     <div class="container text-center">
