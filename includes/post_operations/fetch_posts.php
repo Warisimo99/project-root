@@ -25,7 +25,7 @@ foreach ($posts as &$post) {
     // Image URL handling
     if (!empty($post['image'])) {
         // Ensure consistent path format
-        $post['image_url'] = 'public/assets/images/' . rawurlencode(basename($post['image']));
+        $post['image_url'] = 'public/assets/images/' . htmlspecialchars(basename($post['image']));
 
         
         // Debug logging
