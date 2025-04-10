@@ -52,7 +52,7 @@ function sendemail_verify($fname, $lname, $email, $verify_token) {
         // Content
         $mail->isHTML(true);
         $mail->Subject = 'Email Verification';
-        $verification_link = "http://aces-macbook-pro.local/project-root/public/verify.php?token=$verify_token";
+        $verification_link = "http://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com/includes/user/verify.php?token=$verify_token";
         $mail->Body = "
             <h2>Hello $fname $lname,</h2>
             <p>Thank you for registering! Please click the link below to verify your email address:</p>
@@ -117,7 +117,7 @@ if (isset($_POST['signUp'])) {
     }
 
     // Redirect back to register.php
-    header("Location: register.php");
+    header("Location: public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
     // Handle Sign In
