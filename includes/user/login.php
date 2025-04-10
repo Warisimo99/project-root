@@ -164,7 +164,7 @@ if (isset($_POST['signUp'])) {
         $stmt->close();
     }
 
-    header("Location: /../public/register.php");
+    header("Location: public/register.php");
     exit(); 
 }
 ?>
