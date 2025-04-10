@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+header('Access-Control-Allow-Origin: *');
 
 // Include the database connection file
 $db_path = __DIR__ . '/../includes/db.php';
@@ -18,6 +19,7 @@ if(!file_exists($db_path)) {
 }
 
 require_once $db_path;
+
 
 // Check if the connection was successful
 if (!$conn) {
