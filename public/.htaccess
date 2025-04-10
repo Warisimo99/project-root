@@ -1,15 +1,17 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Remove all /app/ and duplicate /public/ references
-    RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$
+    # Fix duplicate /public/ paths (multiple variants)
+    RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
+    RewriteCond %{REQUEST_URI} ^/app/public/(.*)$
     RewriteRule ^(.*)$ /public/%1 [L,R=301]
     
-    # Redirect legacy paths
+    # Redirect all image requests to proper location
     RewriteRule ^(assets/images/|images/)(.*)$ public/assets/images/$2 [L,R=301]
     
-    # Security - Block direct /app/ access
+    # Security - Block internal paths
     RewriteRule ^app/ - [F]
+    RewriteRule ^private/ - [F]
     
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
