@@ -1,23 +1,22 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Fix duplicate /public/ paths (multiple variants)
+
     RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
-    RewriteCond %{REQUEST_URI} ^/app/public/(.*)$
+    RewriteCond %{REQUEST_URI} ^/app/public/(.*)$ [OR]
+    RewriteCond %{REQUEST_URI} ^/public/public/(.*)$
     RewriteRule ^(.*)$ /public/%1 [L,R=301]
     
     # Redirect all image requests to proper location
     RewriteRule ^(assets/images/|images/)(.*)$ public/assets/images/$2 [L,R=301]
     
-    # Security - Block internal paths
-    RewriteRule ^app/ - [F]
-    RewriteRule ^private/ - [F]
+    RewriteRule ^app/ - [F]  # Block any /app/ access
+    RewriteRule ^private/ - [F]  # Block private directories
     
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
         Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
         Header set Content-Type "image/png" env=!REDIRECT_content-type
-        Header set Content-Type "image/gif" env=!REDIRECT_content-type
         Header set Content-Type "image/webp" env=!REDIRECT_content-type
+        Header set Content-Type "image/%{MATCH_EXT}e"
     </FilesMatch>
 </IfModule>
