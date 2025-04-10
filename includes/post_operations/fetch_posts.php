@@ -25,11 +25,11 @@ foreach ($posts as &$post) {
     // Image URL handling
     if (!empty($post['image'])) {
         // Ensure consistent path format
-        $post['image_url'] = 'public/assets/images/' . htmlspecialchars(basename($post['image']));
+        $post['image'] = 'public/assets/images/' . htmlspecialchars(basename($post['image']));
 
         
         // Debug logging
-        error_log("Image path for post {$post['id']}: {$post['image_url']}");
+        error_log("Image path for post {$post['id']}: {$post['image']}");
     }
     // Remove else clause completely if you don't want default images
     // (Your current else was setting an invalid path)
