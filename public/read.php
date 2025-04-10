@@ -68,6 +68,11 @@ mysqli_stmt_bind_param($stmt, 'i', $postId);
 mysqli_stmt_execute($stmt);
 $commentsResult = mysqli_stmt_get_result($stmt);
 $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
+
+// Remove /app/ from paths
+function fixHerokuPath($path) {
+    return str_replace('/app/public', '/public', $path);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
