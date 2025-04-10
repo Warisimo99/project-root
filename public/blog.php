@@ -177,10 +177,13 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <div class="col-md-4 mb-4">
                                     <div class="card h-100">
                                         <?php if (!empty($post['image'])): ?>
+                                            <!-- Post Image -->
                                             <img src="public/assets/images/<?php echo htmlspecialchars(basename($post['image'])); ?>" class="card-img-top" alt="Post Image">
                                         <?php else: ?>
                                             <img src="https://via.placeholder.com/300" class="card-img-top" alt="Placeholder Image">
                                         <?php endif; ?>
+
+                                        
                                         <div class="card-body">
                                             <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
                                             <p class="card-text"><strong>Author:</strong> <?php echo htmlspecialchars($post['fname']); ?></p>
