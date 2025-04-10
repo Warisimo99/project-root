@@ -55,7 +55,7 @@ session_start();
           <a class="nav-link active" aria-current="page" href="public/dashboard.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="public/help.php">Help</a>
+          <a class="nav-link active" aria-current="page" href="help.php">Help</a>
         </li>
         <li class="nav-item">
         <a class="nav-link active text-bg-info p-2" aria-current="page" href="public/register.php">Register | Login</a>
