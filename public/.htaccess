@@ -19,5 +19,6 @@
         Header set Content-Type "image/png" env=!REDIRECT_content-type
         Header set Content-Type "image/webp" env=!REDIRECT_content-type
         Header set Content-Type "image/%{MATCH_EXT}e"
+        Header set Access-Control-Allow-Origin “*”
     </FilesMatch>
 </IfModule>
