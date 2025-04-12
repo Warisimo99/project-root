@@ -8,7 +8,7 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: user/login.php");
+    header("Location: /user/login.php");
     exit();
 }
 
@@ -30,7 +30,7 @@ $user_id = $_SESSION['user_id'];
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $image_tmp_name = $_FILES['image']['tmp_name'];
             $image_name = basename($_FILES['image']['name']);
-            $upload_dir = 'public/assets/images/'; 
+            $upload_dir = '/public/assets/images/'; 
             $image_path = $upload_dir . $image_name;
 
             // Ensure the upload directory exists
@@ -56,7 +56,7 @@ $user_id = $_SESSION['user_id'];
             
             if (mysqli_stmt_execute($stmt)) {
                 $_SESSION["create"] = "Post added successfully";
-                header("Location: public/blog.php");
+                header("Location: /public/blog.php");
                 exit();
             } else {
                 die("Error: " . mysqli_error($conn));
@@ -80,7 +80,7 @@ $user_id = $_SESSION['user_id'];
         // Handle image upload (if a new image is provided)
         if ($_FILES['image']['name']) {
             $image = $_FILES['image']['name'];
-            $target_dir = "public/assets/images";
+            $target_dir = "/public/assets/images";
             $target_file = $target_dir . basename($_FILES['image']['name']);
             move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
         } else {

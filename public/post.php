@@ -105,7 +105,7 @@ function getPostCount($conn, $user_id) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="/includes/process.php" method="post" enctype="multipart/form-data">
+                    <form action="/../includes/process.php" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                         <div class="form-field mb-4">
                             <input type="text" class="form-control" name="title" placeholder="Enter Title:" required>
