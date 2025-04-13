@@ -7,6 +7,10 @@ error_reporting(E_ALL);
 // Start the session
 session_start();
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 
 $db_path = __DIR__ . '/../../includes/db.php';
 error_log("looking at: . $db_path");
@@ -74,6 +78,17 @@ function sendemail_verify($fname, $lname, $email, $verify_token) {
 }
 
 if (isset($_POST['signUp'])) {
+    //csrf token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $_SESSION['error'] = "CSRF token validation failed.";
+        header("Location: /../public/register.php");
+        exit();
+    }
+
+    //regenerate new token
+    unset($_SESSION['csrf_token']);
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
     // Handle Sign Up
     $fname = trim($_POST['fname']);
     $lname = trim($_POST['lname']);
@@ -124,6 +139,18 @@ if (isset($_POST['signUp'])) {
     header("Location: /../public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
+
+    //csrf token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $_SESSION['error'] = "CSRF token validation failed.";
+        header("Location: /../public/register.php");
+        exit();
+    }
+
+    //regenerate new token
+    unset($_SESSION['csrf_token']);
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    
     // Handle Sign In
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -149,7 +176,7 @@ if (isset($_POST['signUp'])) {
 
                     // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
-                    //$_SESSION['success'] = "Registration successful! Your email has been confirmed.";
+                    $_SESSION['success'] = "Registration successful! Your email has been confirmed.";
                     exit();
                 } else {
                     // Email is not verified - just show error without redirect
