@@ -1,25 +1,36 @@
 <IfModule mod_rewrite.c>
    RewriteEngine On
+
+    # 1. Force HTTPS (critical for secure cookies)
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     
-    # 1. Fix double public paths (multiple variants)
+    # 2. Fix double public paths
     RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
     RewriteCond %{REQUEST_URI} ^/public/public/(.*)$
     RewriteRule ^(.*)$ /public/%1 [L,R=301]
     
-    # 2. Ensure /public/ prefix for all assets
+    # 3. Ensure /public/ prefix for assets
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(assets/images/|images/)(.*)$ /public/assets/images/$2 [L,R=301]
     
-    # 3. Block direct /app/ access
+    # 4. Block direct /app/ access
     RewriteRule ^app/ - [F]
+
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
+    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Strict"
     
+    # Security headers (optional but recommended)
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self'"
+
+    # Force correct Content-Type
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-        # Force correct Content-Type
-        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
-        Header set Content-Type "image/png" env=!REDIRECT_content-type
-        Header set Content-Type "image/webp" env=!REDIRECT_content-type
         Header set Content-Type "image/%{MATCH_EXT}e"
         Header set Access-Control-Allow-Origin “*”
-        Header set Content-Security-Policy upgrade-insecure-requests;
     </FilesMatch>
 </IfModule>
