@@ -1,9 +1,5 @@
 <IfModule mod_rewrite.c>
    RewriteEngine On
-
-    #1. Force HTTPS (critical for secure cookies)
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     
     # 1. Fix double public paths (multiple variants)
     RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
