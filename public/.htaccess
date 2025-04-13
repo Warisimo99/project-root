@@ -13,7 +13,6 @@
     # 3. Block direct /app/ access
     RewriteRule ^app/ - [F]
     
-    
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
         Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
