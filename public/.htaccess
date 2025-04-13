@@ -1,5 +1,9 @@
 <IfModule mod_rewrite.c>
    RewriteEngine On
+
+    #1. Force HTTPS (critical for secure cookies)
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     
     # 1. Fix double public paths (multiple variants)
     RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
@@ -12,6 +16,9 @@
     
     # 3. Block direct /app/ access
     RewriteRule ^app/ - [F]
+
+     # Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
+    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Strict"
     
     <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
         # Force correct Content-Type
