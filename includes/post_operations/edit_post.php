@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../includes/functions/validation.php';
+require_once __DIR__ . '/../includes/functions/sanitize.php';
+
 session_start();
 $resolved_path = __DIR__ . '/../db.php';
 error_log("Resolved path: ".$resolved_path);

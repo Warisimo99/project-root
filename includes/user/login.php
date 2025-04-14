@@ -1,4 +1,18 @@
 <?php
+require_once __DIR__ . '/../includes/functions/validation.php';
+require_once __DIR__ . '/../includes/functions/sanitize.php';
+require_once $db_path;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
+$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
+    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
+require $autoloadPath;
+
+echo __DIR__ . '/vendor/autoload.php';
+
+
 // Start the session
 session_start();
 
@@ -6,7 +20,6 @@ session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 
 
 $db_path = __DIR__ . '/../../includes/db.php';
@@ -29,18 +42,10 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-//require __DIR__ . '/path/to/PHPMailer/src/Exception.php';
-//require __DIR__ . '/path/to/PHPMailer/src/PHPMailer.php';
-//require __DIR__ . '/path/to/PHPMailer/src/SMTP.php';
-$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
-    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
-require $autoloadPath;
-
-echo __DIR__ . '/vendor/autoload.php';
-
+// HTML Purifier Configuration
+$purifier_config = HTMLPurifier_Config::createDefault();
+$purifier_config->set('HTML.Allowed', 'p,br,a[href],strong,em');
+$purifier = new HTMLPurifier($purifier_config);
 
 function sendemail_verify($fname, $lname, $email, $verify_token) {
     $mail = new PHPMailer(true);
@@ -139,57 +144,48 @@ if (isset($_POST['signUp'])) {
     header("Location: /../public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
-
-    // CSRF Token Validation
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); // Fixed path (no `/../`)
+    // Login processing
+    $email = validateEmail($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    
+    if (!$email || empty($password)) {
+        $_SESSION['error'] = "Email and password required";
+        header("Location: /login");
         exit();
     }
 
-    // Regenerate a new CSRF token (after validation)
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-
-    // Handle Sign In
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    if (empty($email) || empty($password)) {
-        $_SESSION['error'] = "Email and password are required.";
-    } else {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if (password_verify($password, $row['password'])) {
-                // Check if the user's email is verified
-                if ($row['is_verified'] == 1) {
-                    // Email is verified, log the user in
-                    $_SESSION['user_id'] = $row['id']; 
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['fname'] = $row['fname'];
-                    $_SESSION['lname'] = $row['lname'];
-
-                    // Redirect to dashboard
-                    header("Location: /../public/dashboard.php");
-                    exit();
-                } else {
-                    // Email is not verified - just show error without redirect
-                    $_SESSION['error'] = "Please verify your email before logging in.";
-                }
+    $stmt = $conn->prepare("SELECT id, fname, lname, email, password, is_verified FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        
+        if (password_verify($password, $user['password'])) {
+            if ($user['is_verified']) {
+                // Successful login
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_name'] = htmlspecialchars($user['fname'] . ' ' . $user['lname']);
+                
+                // Regenerate session ID
+                session_regenerate_id(true);
+                
+                header("Location: /../public/dashboard");
+                exit();
             } else {
-                $_SESSION['error'] = "Incorrect password.";
+                $_SESSION['error'] = "Please verify your email first";
             }
         } else {
-            $_SESSION['error'] = "User not found.";
+            $_SESSION['error'] = "Invalid credentials";
         }
-        $stmt->close();
+    } else {
+        $_SESSION['error'] = "Account not found";
     }
-
-    header("Location: /../public/register.php");
-    exit(); 
+    
+    header("Location: login");
+    exit();
 }
+
 ?>
