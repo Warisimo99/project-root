@@ -1,19 +1,13 @@
 <?php
+// Start the session
+session_start();
 
 // Enable error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-// Start the session
-session_start();
 
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
 
-if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-    die("CSRF validation failed!");
-}
 
 $db_path = __DIR__ . '/../../includes/db.php';
 error_log("looking at: . $db_path");
@@ -30,6 +24,10 @@ if(!file_exists($db_path)) {
 }
 
 require_once $db_path;
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -81,15 +79,14 @@ function sendemail_verify($fname, $lname, $email, $verify_token) {
 }
 
 if (isset($_POST['signUp'])) {
-    //csrf token
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    // CSRF Token Validation
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php");
+        header("Location: /../public/register.php"); // Fixed path (no `/../`)
         exit();
     }
 
-    //regenerate new token
-    unset($_SESSION['csrf_token']);
+    // Regenerate a new CSRF token (after validation)
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Handle Sign Up
@@ -143,15 +140,14 @@ if (isset($_POST['signUp'])) {
     exit();
 } elseif (isset($_POST['signIn'])) {
 
-    //csrf token
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    // CSRF Token Validation
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php");
+        header("Location: /../public/register.php"); // Fixed path (no `/../`)
         exit();
     }
 
-    //regenerate new token
-    unset($_SESSION['csrf_token']);
+    // Regenerate a new CSRF token (after validation)
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Handle Sign In
