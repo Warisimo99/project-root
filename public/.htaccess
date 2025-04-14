@@ -12,17 +12,24 @@
     
     # 3. Block direct /app/ access
     RewriteRule ^app/ - [F]
-
-     # Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
-    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Strict"
-    
-    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-        # Force correct Content-Type
-        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
-        Header set Content-Type "image/png" env=!REDIRECT_content-type
-        Header set Content-Type "image/webp" env=!REDIRECT_content-type
-        Header set Content-Type "image/%{MATCH_EXT}e"
-        Header set Access-Control-Allow-Origin “*”
-        Header set Content-Security-Policy upgrade-insecure-requests;
-    </FilesMatch>
 </IfModule>
+
+# Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
+Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Strict"
+
+<FilesMatch "\.(php)$">
+Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+Header set Pragma "no-cache"
+Header set Expires "Sat, 1 Jan 2000 00:00:00 GMT"
+</FilesMatch>
+
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    # Force correct Content-Type
+    Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
+    Header set Content-Type "image/png" env=!REDIRECT_content-type
+    Header set Content-Type "image/webp" env=!REDIRECT_content-type
+    Header set Content-Type "image/%{MATCH_EXT}e"
+    Header set Access-Control-Allow-Origin “*”
+    Header set Content-Security-Policy upgrade-insecure-requests;
+</FilesMatch>
+
