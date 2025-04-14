@@ -11,6 +11,9 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    die("CSRF validation failed!");
+}
 
 $db_path = __DIR__ . '/../../includes/db.php';
 error_log("looking at: . $db_path");
@@ -150,7 +153,7 @@ if (isset($_POST['signUp'])) {
     //regenerate new token
     unset($_SESSION['csrf_token']);
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    
+
     // Handle Sign In
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -176,7 +179,6 @@ if (isset($_POST['signUp'])) {
 
                     // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
-                    $_SESSION['success'] = "Registration successful! Your email has been confirmed.";
                     exit();
                 } else {
                     // Email is not verified - just show error without redirect

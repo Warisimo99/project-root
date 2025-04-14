@@ -15,7 +15,7 @@
 </IfModule>
 
     # Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
-    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Strict"
+    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
 
     <FilesMatch "\.(php)$">
     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
