@@ -147,12 +147,12 @@ if (isset($_POST['signUp'])) {
         die(json_encode(['error' => 'Password is required']));
     }
     
-    else {
+    try {
         $stmt = $conn->prepare("SELECT id, password, is_verified FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-
+    
         if ($result->num_rows === 1) {
             $user = $result->fetch_assoc();
             
@@ -161,23 +161,26 @@ if (isset($_POST['signUp'])) {
                     // Successful login
                     $_SESSION['user_id'] = $user['id'];
                     session_regenerate_id(true);
-                    
-                    // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
                     exit();
                 } else {
                     $_SESSION['error'] = "Please verify your email first";
-                    header("Location: /../user/login.php");
+                    header("Location: login.php");
                     exit();
                 }
             }
         }
+        
+        // Generic error (prevent user enumeration)
+        $_SESSION['error'] = "Invalid email or password";
+        header("Location: login.php");
+        exit();
+    
+    } catch (Exception $e) {
+        error_log("Login Error: " . $e->getMessage());
+        $_SESSION['error'] = "System error";
+        header("Location: login.php");
+        exit();
     }
 }
-
-
-// Generic error message (prevent user enumeration)
-$_SESSION['error'] = "Invalid email or password";
-header("Location: login.php");
-exit();
 ?>
