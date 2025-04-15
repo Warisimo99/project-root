@@ -43,11 +43,11 @@ if (isset($_GET['token'])) {
     }
 
     // Redirect to login page
-    header("Location: register.php");
+    header("Location: /../public/register.php");
     exit();
 } else {
     $_SESSION['error'] = "No verification token provided.";
-    header("Location: register.php");
+    header("Location: /../public/register.php");
     exit();
 }
 ?>

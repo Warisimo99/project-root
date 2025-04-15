@@ -1,23 +1,6 @@
 <?php
-require_once $db_path;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-
-$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
-    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
-require $autoloadPath;
-
-echo __DIR__ . '/vendor/autoload.php';
-
-
 // Start the session
 session_start();
-
-// Enable error reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
 
 $db_path = __DIR__ . '/../../includes/db.php';
@@ -36,9 +19,18 @@ if(!file_exists($db_path)) {
 
 require_once $db_path;
 
+$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
+    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
+require $autoloadPath;
+
+echo __DIR__ . '/vendor/autoload.php';
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 function sendemail_verify($fname, $lname, $email, $verify_token) {
     $mail = new PHPMailer(true);
@@ -80,7 +72,7 @@ if (isset($_POST['signUp'])) {
     // CSRF Token Validation
     if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); // Fixed path (no `/../`)
+        header("Location: /../public/register.php"); 
         exit();
     }
 
@@ -137,62 +129,68 @@ if (isset($_POST['signUp'])) {
     header("Location: /../public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
-    // Login processing
-    // Sanitize and validate inputs
-// Validate email format
-$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    die("Invalid email");
-}
-$password = trim($_POST['password']);
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    die(json_encode(['error' => 'Invalid email format']));
-}
+    // CSRF Token Validation
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $_SESSION['error'] = "CSRF token validation failed.";
+        header("Location: /../public/register.php"); // Fixed path (no `/../`)
+        exit();
+    }
 
-if (empty($password)) {
-    http_response_code(400);
-    die(json_encode(['error' => 'Password is required']));
-}
+    // Regenerate a new CSRF token (after validation)
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-try {
-    // Check user credentials
-    $stmt = $conn->prepare("SELECT id, fname, lname, email, password, is_verified FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Handle Sign In
+    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $password = trim($_POST['password']);
 
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-        
-        if (password_verify($password, $user['password'])) {
-            if ($user['is_verified'] == 1) {
-                // Successful login
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_name'] = $user['fname'] . ' ' . $user['lname'];
-                
-                // Regenerate session ID
-                session_regenerate_id(true);
-                
-                echo json_encode(['success' => true, 'redirect' => '/../public/dashboard.php']);
-                exit();
-            } else {
-                http_response_code(403);
-                die(json_encode(['error' => 'Please verify your email first']));
-            }
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        die(json_encode(['error' => 'Invalid email format']));
+    }
+
+    if (empty($password)) {
+        http_response_code(400);
+        die(json_encode(['error' => 'Password is required']));
     }
     
-    // Generic error message for security (don't reveal if email exists)
-    http_response_code(401);
-    die(json_encode(['error' => 'Invalid credentials']));
-    
-} catch (Exception $e) {
-    error_log("Login Error: " . $e->getMessage());
-    http_response_code(500);
-    die(json_encode(['error' => 'Internal server error']));
-}
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if (password_verify($password, $row['password'])) {
+                // Check if the user's email is verified
+                if ($row['is_verified'] == 1) {
+                    // Email is verified, log the user in
+                    $_SESSION['user_id'] = $row['id']; 
+                    $_SESSION['email'] = $row['email'];
+                    $_SESSION['user_name'] = $user['fname'] . ' ' . $user['lname'];
+
+                     // Regenerate session ID
+                    session_regenerate_id(true);
+                    
+                    echo json_encode(['success' => true, 'redirect' => '/../public/dashboard.php']);
+                    exit();
+                } else {
+                    http_response_code(403);
+                    die(json_encode(['error' => 'Please verify your email first']));
+                }
+
+            }
+        }
+        
+        // Generic error message for security (don't reveal if email exists)
+        http_response_code(401);
+        die(json_encode(['error' => 'Invalid credentials']));
+        
+    } catch (Exception $e) {
+        error_log("Login Error: " . $e->getMessage());
+        http_response_code(500);
+        die(json_encode(['error' => 'Internal server error']));
+    }
 }
 ?>
