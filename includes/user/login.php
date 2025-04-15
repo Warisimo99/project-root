@@ -150,43 +150,37 @@ if (isset($_POST['signUp'])) {
         die(json_encode(['error' => 'Password is required']));
     }
     
-    try {
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    else {
+        $stmt = $conn->prepare("SELECT id, password, is_verified FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if (password_verify($password, $row['password'])) {
-                // Check if the user's email is verified
-                if ($row['is_verified'] == 1) {
-                    // Email is verified, log the user in
-                    $_SESSION['user_id'] = $row['id']; 
-                    $_SESSION['email'] = $row['email'];
-                    $_SESSION['user_name'] = $user['fname'] . ' ' . $user['lname'];
-
-                     // Regenerate session ID
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            
+            if (password_verify($password, $user['password'])) {
+                if ($user['is_verified'] == 1) {
+                    // Successful login
+                    $_SESSION['user_id'] = $user['id'];
                     session_regenerate_id(true);
                     
-                    echo json_encode(['success' => true, 'redirect' => '/../public/dashboard.php']);
+                    // Redirect to dashboard
+                    header("Location: /../public//dashboard.php");
                     exit();
                 } else {
-                    http_response_code(403);
-                    die(json_encode(['error' => 'Please verify your email first']));
+                    $_SESSION['error'] = "Please verify your email first";
+                    header("Location: /../user/login.php");
+                    exit();
                 }
-
             }
         }
-        
-        // Generic error message for security (don't reveal if email exists)
-        http_response_code(401);
-        die(json_encode(['error' => 'Invalid credentials']));
-        
-    } catch (Exception $e) {
-        error_log("Login Error: " . $e->getMessage());
-        http_response_code(500);
-        die(json_encode(['error' => 'Internal server error']));
     }
 }
+
+
+// Generic error message (prevent user enumeration)
+$_SESSION['error'] = "Invalid email or password";
+header("Location: /login.php");
+exit();
 ?>
