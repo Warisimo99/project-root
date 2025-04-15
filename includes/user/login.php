@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../includes/functions/validation.php';
-require_once __DIR__ . '/../includes/functions/sanitize.php';
 require_once $db_path;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
