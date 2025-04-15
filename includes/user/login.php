@@ -144,8 +144,12 @@ if (isset($_POST['signUp'])) {
 } elseif (isset($_POST['signIn'])) {
     // Login processing
     // Sanitize and validate inputs
-$email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
-$password = $_POST['password'] ?? '';
+// Validate email format
+$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    die("Invalid email");
+}
+$password = $_POST['password'];
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);

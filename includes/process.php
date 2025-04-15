@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 // Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -6,11 +7,11 @@ ini_set('display_errors', 1);
 
 session_start();
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /user/login.php");
-    exit();
-}
+// Initialize HTML Purifier
+$config = HTMLPurifier_Config::createDefault();
+$config->set('HTML.Allowed', 'p,br,a[href],strong,em,ul,ol,li,img[src|alt],h1,h2,h3,h4');
+$config->set('URI.AllowedSchemes', ['http' => true, 'https' => true]);
+$purifier = new HTMLPurifier($config);
 
 $user_id = $_SESSION['user_id'];
 
@@ -18,29 +19,22 @@ $user_id = $_SESSION['user_id'];
         include("db.php");
 
         // Retrieve and sanitize form data
-        $title = trim($_POST['title']);
-        $fname = trim($_POST['fname']);
-        $summary = trim($_POST['summary']);
-        $content = trim($_POST['content']);
-        $category = trim($_POST['category']);
+        $title = htmlspecialchars(trim($_POST['title']));
+        $fname = htmlspecialchars(trim($_POST['fname']));
+        $summary = htmlspecialchars(trim($_POST['summary']));
+        $content = htmlspecialchars(trim($_POST['content']));
+        $category = htmlspecialchars(trim($_POST['category']));
         $created_at = trim($_POST['created_at']);
 
         // Handle image upload
         $image_path = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $image_tmp_name = $_FILES['image']['tmp_name'];
-            $image_name = basename($_FILES['image']['name']);
-            $upload_dir = '/public/assets/images/'; 
-            $image_path = $upload_dir . $image_name;
-
-            // Ensure the upload directory exists
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true); 
-            }
-
-            // Move the uploaded file
-            if (!move_uploaded_file($image_tmp_name, $image_path)) {
-                die("Failed to upload image.");
+        if (!empty($_FILES['image']['name'])) {
+            $allowed = ['image/jpeg', 'image/png'];
+            if (in_array($_FILES['image']['type'], $allowed)) {
+                $uploadDir = __DIR__ . '/public/assets/uploads/';
+                $filename = uniqid() . '_' . basename($_FILES['image']['name']);
+                move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename);
+                $imagePath = $filename;
             }
         }
 

@@ -152,8 +152,8 @@ function getPostCount($conn, $user_id) {
                 <div class="card-body">
                     <h5 class="card-title">' . htmlspecialchars($row['title']) . '</h5>
                     <p class="card-text"><strong>Author:</strong> ' . htmlspecialchars($row['fname']) . '</p>
-                    <p class="card-text"><strong>Summary:</strong> ' . htmlspecialchars($row['summary']) . '</p>
-                    <p class="card-text"><strong>Content:</strong> ' . htmlspecialchars($row['content']) . '</p>
+                    <p class="card-text"><strong>Summary:</strong> ' . $row['summary'] . '</p> <!-- Already purified -->
+                    <div class="card-text"><strong>Content:</strong> ' . $row['content'] . '</div> <!-- Already purified -->
                     <p class="card-text"><strong>Category:</strong> ' . htmlspecialchars($row['category']) . '</p>
                     <p class="card-text"><strong>Created At:</strong> ' . htmlspecialchars($row['created_at']) . '</p>
                     <div class="d-flex gap-2">
@@ -163,6 +163,7 @@ function getPostCount($conn, $user_id) {
                 </div>
             </div>';
         }
+       
     } else {
         echo '<p>No posts found.</p>';
     }
