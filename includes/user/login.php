@@ -181,6 +181,6 @@ if (isset($_POST['signUp'])) {
 
 // Generic error message (prevent user enumeration)
 $_SESSION['error'] = "Invalid email or password";
-header("Location: /login.php");
+header("Location: login.php");
 exit();
 ?>
