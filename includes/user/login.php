@@ -181,7 +181,7 @@ try {
                 // Regenerate session ID
                 session_regenerate_id(true);
                 
-                echo json_encode(['success' => true, 'redirect' => '/dashboard.php']);
+                echo json_encode(['success' => true, 'redirect' => '/../public/dashboard.php']);
                 exit();
             } else {
                 http_response_code(403);
