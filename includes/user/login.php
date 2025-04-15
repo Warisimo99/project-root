@@ -19,11 +19,7 @@ if(!file_exists($db_path)) {
 
 require_once $db_path;
 
-$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
-    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
-require $autoloadPath;
-
-echo __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
