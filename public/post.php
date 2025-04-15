@@ -1,7 +1,7 @@
 <?php
 session_start();
+require_once __DIR__ . '/../db.php';
 
-require_once __DIR__ . '/../includes/db.php';
 
 function getPostCount($conn, $user_id) {
     $stmt = $conn->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE user_id = ?");
