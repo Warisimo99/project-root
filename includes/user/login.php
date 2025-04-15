@@ -145,11 +145,11 @@ if (isset($_POST['signUp'])) {
     exit();
 } elseif (isset($_POST['signIn'])) {
     // Login processing
-    $email = validateEmail($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    
-    if (!$email || empty($password)) {
-        $_SESSION['error'] = "Email and password required";
+    $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
+    $password = $_POST['password']; 
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error'] = "Invalid email format";
         header("Location: /login");
         exit();
     }
@@ -172,7 +172,7 @@ if (isset($_POST['signUp'])) {
                 // Regenerate session ID
                 session_regenerate_id(true);
                 
-                header("Location: /../public/dashboard");
+                header("Location: /dashboard");
                 exit();
             } else {
                 $_SESSION['error'] = "Please verify your email first";
@@ -184,7 +184,7 @@ if (isset($_POST['signUp'])) {
         $_SESSION['error'] = "Account not found";
     }
     
-    header("Location: login");
+    header("Location: /login");
     exit();
 }
 
