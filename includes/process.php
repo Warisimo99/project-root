@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../functions/sanitize.php';
+require_once __DIR__ . '/../functions/upload.php';
+require_once __DIR__ . '/../functions/validation.php';
 // Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

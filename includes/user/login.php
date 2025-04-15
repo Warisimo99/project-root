@@ -141,8 +141,7 @@ if (isset($_POST['signUp'])) {
     // CSRF Token Validation
     if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); // Fixed path (no `/../`)
-        exit();
+        header("Location: /../public/register.php"); 
     }
 
     // Regenerate a new CSRF token (after validation)
