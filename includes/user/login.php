@@ -40,11 +40,6 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// HTML Purifier Configuration
-$purifier_config = HTMLPurifier_Config::createDefault();
-$purifier_config->set('HTML.Allowed', 'p,br,a[href],strong,em');
-$purifier = new HTMLPurifier($purifier_config);
-
 function sendemail_verify($fname, $lname, $email, $verify_token) {
     $mail = new PHPMailer(true);
 
