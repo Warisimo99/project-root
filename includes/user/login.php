@@ -149,7 +149,7 @@ $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     die("Invalid email");
 }
-$password = $_POST['password'];
+$password = trim($_POST['password']);
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
