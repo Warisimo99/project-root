@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../db.php';
 
+error_log("DB Connection: " . ($conn->connect_error ? $conn->connect_error : "Success"));
 
 function getPostCount($conn, $user_id) {
     $stmt = $conn->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE user_id = ?");

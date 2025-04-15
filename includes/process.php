@@ -1,103 +1,147 @@
 <?php
-require_once __DIR__ . '/../functions/sanitize.php';
-require_once __DIR__ . '/../functions/upload.php';
-require_once __DIR__ . '/../functions/validation.php';
-// Enable error reporting for debugging
+// Enable full error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../../logs/php_errors.log');
 
-
+// Start secure session
 session_start();
+
+// Load dependencies
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . 'db.php';
+
+// Verify user is logged in
+if (empty($_SESSION['user_id'])) {
+    header("Location: /login.php");
+    exit();
+}
 
 // Initialize HTML Purifier
 $config = HTMLPurifier_Config::createDefault();
 $config->set('HTML.Allowed', 'p,br,a[href],strong,em,ul,ol,li,img[src|alt],h1,h2,h3,h4');
-$config->set('URI.AllowedSchemes', ['http' => true, 'https' => true]);
 $purifier = new HTMLPurifier($config);
 
-$user_id = $_SESSION['user_id'];
-
-    if (isset($_POST['create'])) {
-        include("db.php");
-
-        // Retrieve and sanitize form data
-        $title = htmlspecialchars(trim($_POST['title']));
-        $fname = htmlspecialchars(trim($_POST['fname']));
-        $summary = htmlspecialchars(trim($_POST['summary']));
-        $content = htmlspecialchars(trim($_POST['content']));
-        $category = htmlspecialchars(trim($_POST['category']));
-        $created_at = trim($_POST['created_at']);
+if (isset($_POST['create'])) {
+    try {
+        // Validate and sanitize inputs
+        $title = htmlspecialchars(trim($_POST['title'] ?? ''));
+        $fname = htmlspecialchars(trim($_POST['fname'] ?? ''));
+        $summary = $purifier->purify(trim($_POST['summary'] ?? ''));
+        $content = $purifier->purify(trim($_POST['content'] ?? ''));
+        $category = htmlspecialchars(trim($_POST['category'] ?? ''));
+        $created_at = date('Y-m-d H:i:s');
 
         // Handle image upload
         $image_path = null;
         if (!empty($_FILES['image']['name'])) {
-            $allowed = ['image/jpeg', 'image/png'];
-            if (in_array($_FILES['image']['type'], $allowed)) {
-                $uploadDir = __DIR__ . '/public/assets/uploads/';
-                $filename = uniqid() . '_' . basename($_FILES['image']['name']);
-                move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename);
-                $imagePath = $filename;
-            }
-        }
-
-        // Insert data into the database using prepared statements
-        $sqlInsert = "INSERT INTO posts (user_id, fname, title, summary, content, category, created_at, image) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        // Prepare the statement
-        $stmt = mysqli_prepare($conn, $sqlInsert);
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "isssssss", $user_id, $fname, $title, $summary, $content, $category, $created_at, $image_path);
-
+            $allowed_types = ['image/jpeg', 'image/png'];
+            $detected_type = mime_content_type($_FILES['image']['tmp_name']);
             
-            if (mysqli_stmt_execute($stmt)) {
-                $_SESSION["create"] = "Post added successfully";
-                header("Location: /public/blog.php");
-                exit();
-            } else {
-                die("Error: " . mysqli_error($conn));
+            if (in_array($detected_type, $allowed_types)) {
+                $upload_dir = __DIR__ . '/../../public/assets/uploads/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                
+                $filename = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9\.\-]/', '', $_FILES['image']['name']);
+                $target_path = $upload_dir . $filename;
+                
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
+                    $image_path = $filename;
+                }
             }
-
-            // Close the statement
-            mysqli_stmt_close($stmt);
-        } else {
-            die("Error preparing statement: " . mysqli_error($conn));
         }
-    }
-    if (isset($_POST['update'])) {
-        $post_id = $_POST['post_id'];
-        $user_id = $_SESSION['user_id'];
-        $title = $_POST['title'];
-        $fname = $_POST['fname'];
-        $summary = $_POST['summary'];
-        $content = $_POST['content'];
-        $category = $_POST['category'];
 
-        // Handle image upload (if a new image is provided)
-        if ($_FILES['image']['name']) {
-            $image = $_FILES['image']['name'];
-            $target_dir = "/public/assets/images";
-            $target_file = $target_dir . basename($_FILES['image']['name']);
-            move_uploaded_file($_FILES['image']['tmp_name'], $target_file);
+        // Insert into database
+        $stmt = $conn->prepare("INSERT INTO posts 
+            (user_id, fname, title, summary, content, category, created_at, image) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        
+        $stmt->bind_param("isssssss", 
+            $_SESSION['user_id'],
+            $fname,
+            $title,
+            $summary,
+            $content,
+            $category,
+            $created_at,
+            $image_path
+        );
+
+        if ($stmt->execute()) {
+            $_SESSION['success'] = "Post added successfully";
+            header("Location: blog.php");
+            exit();
         } else {
-            // Keep the existing image if no new image is uploaded
-            $stmt = $conn->prepare("SELECT image FROM posts WHERE id = ?");
-            $stmt->bind_param("i", $post_id);
+            throw new Exception("Database error: " . $conn->error);
+        }
+    } catch (Exception $e) {
+        error_log("Post creation error: " . $e->getMessage());
+        $_SESSION['error'] = "Failed to create post. Please try again.";
+        header("Location: blog.php");
+        exit();
+    }
+}
+
+if (isset($_POST['update'])) {
+    try {
+        $post_id = (int)$_POST['post_id'];
+        $title = htmlspecialchars(trim($_POST['title'] ?? ''));
+        $fname = htmlspecialchars(trim($_POST['fname'] ?? ''));
+        $summary = $purifier->purify(trim($_POST['summary'] ?? ''));
+        $content = $purifier->purify(trim($_POST['content'] ?? ''));
+        $category = htmlspecialchars(trim($_POST['category'] ?? ''));
+
+        // Handle image upload
+        $image = null;
+        if (!empty($_FILES['image']['name'])) {
+            $allowed_types = ['image/jpeg', 'image/png'];
+            $detected_type = mime_content_type($_FILES['image']['tmp_name']);
+            
+            if (in_array($detected_type, $allowed_types)) {
+                $upload_dir = __DIR__ . '/../../public/assets/images/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                
+                $filename = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9\.\-]/', '', $_FILES['image']['name']);
+                $target_path = $upload_dir . $filename;
+                
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $target_path)) {
+                    $image = $filename;
+                }
+            }
+        } else {
+            // Keep existing image
+            $stmt = $conn->prepare("SELECT image FROM posts WHERE id = ? AND user_id = ?");
+            $stmt->bind_param("ii", $post_id, $_SESSION['user_id']);
             $stmt->execute();
             $result = $stmt->get_result();
             $row = $result->fetch_assoc();
-            $image = $row['image'];
+            $image = $row['image'] ?? null;
         }
 
-        // Update the post in the database
-        $stmt = $conn->prepare("UPDATE posts SET title = ?, fname = ?, summary = ?, content = ?, category = ?, image = ? WHERE id = ? AND user_id = ?");
-        $stmt->bind_param("ssssssii", $title, $fname, $summary, $content, $category, $image, $post_id, $user_id);
-        $stmt->execute();
+        // Update post
+        $stmt = $conn->prepare("UPDATE posts SET 
+            title = ?, fname = ?, summary = ?, content = ?, category = ?, image = ? 
+            WHERE id = ? AND user_id = ?");
+        
+        $stmt->bind_param("ssssssii", 
+            $title, $fname, $summary, $content, $category, $image, $post_id, $_SESSION['user_id']
+        );
 
-        if ($stmt->affected_rows > 0) {
+        if ($stmt->execute()) {
             $_SESSION['success'] = "Post updated successfully!";
         } else {
-            $_SESSION['error'] = "Failed to update post.";
+            throw new Exception("Database error: " . $conn->error);
         }
+    } catch (Exception $e) {
+        error_log("Post update error: " . $e->getMessage());
+        $_SESSION['error'] = "Failed to update post.";
     }
-?>
+    
+    header("Location: blog.php");
+    exit();
+}
