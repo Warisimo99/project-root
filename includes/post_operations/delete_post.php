@@ -1,9 +1,6 @@
 <?php
 session_start();
-$resolved_path = __DIR__ . '/../db.php';
-error_log("Resolved path: ".$resolved_path);
-error_log("File exists:".(file_exists($resolved_path) ? 'Yes' : 'No'));
-require_once $resolved_path;
+require_once __DIR__ . '/../db.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
