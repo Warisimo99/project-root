@@ -133,9 +133,6 @@ if (isset($_POST['signUp'])) {
         exit();
     }
 
-    // Regenerate a new CSRF token (after validation)
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-
     // Handle Sign In
     $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
     $password = trim($_POST['password']);
@@ -166,7 +163,7 @@ if (isset($_POST['signUp'])) {
                     session_regenerate_id(true);
                     
                     // Redirect to dashboard
-                    header("Location: /../public//dashboard.php");
+                    header("Location: /../public/dashboard.php");
                     exit();
                 } else {
                     $_SESSION['error'] = "Please verify your email first";
