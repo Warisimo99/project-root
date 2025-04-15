@@ -2,6 +2,12 @@
 // Start the session
 session_start();
 
+// Enable error reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 
 $db_path = __DIR__ . '/../../includes/db.php';
 error_log("looking at: . $db_path");
@@ -19,14 +25,20 @@ if(!file_exists($db_path)) {
 
 require_once $db_path;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+
+$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
+    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
+require $autoloadPath;
+
+echo __DIR__ . '/vendor/autoload.php';
+
 
 function sendemail_verify($fname, $lname, $email, $verify_token) {
     $mail = new PHPMailer(true);
@@ -68,7 +80,7 @@ if (isset($_POST['signUp'])) {
     // CSRF Token Validation
     if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); 
+        header("Location: /../public/register.php"); // Fixed path (no `/../`)
         exit();
     }
 
@@ -133,54 +145,49 @@ if (isset($_POST['signUp'])) {
         exit();
     }
 
+    // Regenerate a new CSRF token (after validation)
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
     // Handle Sign In
-    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        die(json_encode(['error' => 'Invalid email format']));
-    }
-
-    if (empty($password)) {
-        http_response_code(400);
-        die(json_encode(['error' => 'Password is required']));
-    }
-    
-    try {
-        $stmt = $conn->prepare("SELECT id, password, is_verified FROM users WHERE email = ?");
+    if (empty($email) || empty($password)) {
+        $_SESSION['error'] = "Email and password are required.";
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-    
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-            
-            if (password_verify($password, $user['password'])) {
-                if ($user['is_verified'] == 1) {
-                    // Successful login
-                    $_SESSION['user_id'] = $user['id'];
-                    session_regenerate_id(true);
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if (password_verify($password, $row['password'])) {
+                // Check if the user's email is verified
+                if ($row['is_verified'] == 1) {
+                    // Email is verified, log the user in
+                    $_SESSION['user_id'] = $row['id']; 
+                    $_SESSION['email'] = $row['email'];
+                    $_SESSION['fname'] = $row['fname'];
+                    $_SESSION['lname'] = $row['lname'];
+
+                    // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
                     exit();
                 } else {
-                    $_SESSION['error'] = "Please verify your email first";
-                    header("Location: login.php");
-                    exit();
+                    // Email is not verified - just show error without redirect
+                    $_SESSION['error'] = "Please verify your email before logging in.";
                 }
+            } else {
+                $_SESSION['error'] = "Incorrect password.";
             }
+        } else {
+            $_SESSION['error'] = "User not found.";
         }
-        
-        // Generic error (prevent user enumeration)
-        $_SESSION['error'] = "Invalid email or password";
-        header("Location: login.php");
-        exit();
-    
-    } catch (Exception $e) {
-        error_log("Login Error: " . $e->getMessage());
-        $_SESSION['error'] = "System error";
-        header("Location: login.php");
-        exit();
+        $stmt->close();
     }
+
+    header("Location: /../public/register.php");
+    exit(); 
 }
 ?>
