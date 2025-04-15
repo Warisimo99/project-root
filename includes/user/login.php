@@ -143,47 +143,57 @@ if (isset($_POST['signUp'])) {
     exit();
 } elseif (isset($_POST['signIn'])) {
     // Login processing
-    $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL));
-    $password = $_POST['password']; 
+    // Sanitize and validate inputs
+$email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+$password = $_POST['password'] ?? '';
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['error'] = "Invalid email format";
-        header("Location: /login");
-        exit();
-    }
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Invalid email format']));
+}
 
+if (empty($password)) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Password is required']));
+}
+
+try {
+    // Check user credentials
     $stmt = $conn->prepare("SELECT id, fname, lname, email, password, is_verified FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         
         if (password_verify($password, $user['password'])) {
-            if ($user['is_verified']) {
+            if ($user['is_verified'] == 1) {
                 // Successful login
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_name'] = htmlspecialchars($user['fname'] . ' ' . $user['lname']);
+                $_SESSION['user_name'] = $user['fname'] . ' ' . $user['lname'];
                 
                 // Regenerate session ID
                 session_regenerate_id(true);
                 
-                header("Location: /dashboard");
+                echo json_encode(['success' => true, 'redirect' => '/dashboard.php']);
                 exit();
             } else {
-                $_SESSION['error'] = "Please verify your email first";
+                http_response_code(403);
+                die(json_encode(['error' => 'Please verify your email first']));
             }
-        } else {
-            $_SESSION['error'] = "Invalid credentials";
         }
-    } else {
-        $_SESSION['error'] = "Account not found";
     }
     
-    header("Location: /login");
-    exit();
+    // Generic error message for security (don't reveal if email exists)
+    http_response_code(401);
+    die(json_encode(['error' => 'Invalid credentials']));
+    
+} catch (Exception $e) {
+    error_log("Login Error: " . $e->getMessage());
+    http_response_code(500);
+    die(json_encode(['error' => 'Internal server error']));
 }
-
+}
 ?>
