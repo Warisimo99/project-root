@@ -38,6 +38,6 @@
         Header set Content-Type "image/webp" env=!REDIRECT_content-type
         Header set Content-Type "image/%{MATCH_EXT}e"
         Header set Access-Control-Allow-Origin “*”
-        Header set Content-Security-Policy upgrade-insecure-requests;
+        Header set Content-Security-Policy "default-src 'self'; img-src 'self' data:"
     </FilesMatch>
 
