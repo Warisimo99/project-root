@@ -14,7 +14,7 @@ require_once 'db.php';
 
 // Verify user is logged in
 if (empty($_SESSION['user_id'])) {
-    header("Location: /login.php");
+    header("Location: /../user/login.php");
     exit();
 }
 
