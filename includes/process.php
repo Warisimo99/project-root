@@ -72,7 +72,7 @@ if (isset($_POST['create'])) {
 
         if ($stmt->execute()) {
             $_SESSION['success'] = "Post added successfully";
-            header("Location: blog.php");
+            header("Location: /../public/blog.php");
             exit();
         } else {
             throw new Exception("Database error: " . $conn->error);
@@ -80,7 +80,7 @@ if (isset($_POST['create'])) {
     } catch (Exception $e) {
         error_log("Post creation error: " . $e->getMessage());
         $_SESSION['error'] = "Failed to create post. Please try again.";
-        header("Location: blog.php");
+        header("Location: /../public/blog.php");
         exit();
     }
 }
@@ -142,6 +142,6 @@ if (isset($_POST['update'])) {
         $_SESSION['error'] = "Failed to update post.";
     }
     
-    header("Location: blog.php");
+    header("Location: /../public/blog.php");
     exit();
 }
