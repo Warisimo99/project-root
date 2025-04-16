@@ -10,7 +10,7 @@ session_start();
 
 // Load dependencies
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . 'db.php';
+require_once 'db.php';
 
 // Verify user is logged in
 if (empty($_SESSION['user_id'])) {
