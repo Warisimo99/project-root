@@ -2,8 +2,13 @@
 // MUST BE AT THE VERY TOP (before any HTML/output)
 session_start();
 
-// Nuclear option for session destruction
-$_SESSION = []; // Clear session data
+// Generate new CSRF token BEFORE destroying session
+$newCsrfToken = bin2hex(random_bytes(32));
+
+// Clear session data
+$_SESSION = [];
+
+// Destroy session completely
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(
@@ -18,15 +23,12 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-// Start a fresh session and generate a new CSRF token
-session_start(); // Restart the session
-$_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // for next login
+// Start fresh session with CSRF token
+session_start();
+$_SESSION['csrf_token'] = $newCsrfToken;
+$_SESSION['csrf_token_expiry'] = time() + 900;
 
-
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Pragma: no-cache");
-header("Expires: Sat, 1 Jan 2000 00:00:00 GMT");
-
+// Redirect to register page
 header("Location: register.php");
 exit();
 ?>

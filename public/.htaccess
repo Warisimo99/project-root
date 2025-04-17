@@ -1,43 +1,25 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # 1. Fix double public paths (multiple variants)
-    RewriteCond %{REQUEST_URI} ^/app/public/public/(.*)$ [OR]
-    RewriteCond %{REQUEST_URI} ^/public/public/(.*)$
-    RewriteRule ^(.*)$ /public/%1 [L,R=301]
+    # Fix double public paths
+    RewriteCond %{REQUEST_URI} ^/(app/public/public|public/public)/(.*)$
+    RewriteRule ^ /public/%2 [L,R=301]
     
-    # 2. Ensure /public/ prefix for all assets
+    # Ensure /public/ prefix for assets
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(assets/images/|images/)(.*)$ /public/assets/images/$2 [L,R=301]
     
-    # 3. Block direct /app/ access
+    # Block direct /app/ access
     RewriteRule ^app/ - [F]
 </IfModule>
-    # Security Headers
-    Header always set X-Frame-Options "DENY"
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-    Header always set Permissions-Policy "geolocation=(), microphone=()"
-    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
 
-    # Secure ALL cookies (HTTPS-only, HttpOnly, SameSite=Strict)
-    Header always edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"
+# Security Headers (only the critical ones)
+Header always set X-Frame-Options "DENY"
+Header always set X-Content-Type-Options "nosniff"
 
-    <FilesMatch "\.(php)$">
+# Cache control for PHP files only
+<FilesMatch "\.(php)$">
     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
     Header set Pragma "no-cache"
     Header set Expires "Sat, 1 Jan 2000 00:00:00 GMT"
-    Header set X-XSS-Protection "1; mode=block"
-    Header always unset X-Powered-By
-    </FilesMatch>
-
-    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
-        # Force correct Content-Type
-        Header set Content-Type "image/jpeg" env=!REDIRECT_content-type
-        Header set Content-Type "image/png" env=!REDIRECT_content-type
-        Header set Content-Type "image/webp" env=!REDIRECT_content-type
-        Header set Content-Type "image/%{MATCH_EXT}e"
-        Header set Access-Control-Allow-Origin “*”
-        Header set Content-Security-Policy "default-src 'self'; img-src 'self' data:"
-    </FilesMatch>
-
+</FilesMatch>
