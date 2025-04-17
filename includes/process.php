@@ -26,11 +26,11 @@ $purifier = new HTMLPurifier($config);
 if (isset($_POST['create'])) {
     try {
         // Validate and sanitize inputs
-        $title = htmlspecialchars(trim($_POST['title'] ?? ''));
-        $fname = htmlspecialchars(trim($_POST['fname'] ?? ''));
+        $title = $purifier->purify(trim($_POST['title'] ?? ''));
+        $fname = $purifier->purify(trim($_POST['fname'] ?? ''));
         $summary = $purifier->purify(trim($_POST['summary'] ?? ''));
         $content = $purifier->purify(trim($_POST['content'] ?? ''));
-        $category = htmlspecialchars(trim($_POST['category'] ?? ''));
+        $category = $purifier->purify(trim($_POST['category'] ?? ''));
         $created_at = date('Y-m-d H:i:s');
 
         // Handle image upload
@@ -88,8 +88,8 @@ if (isset($_POST['create'])) {
 if (isset($_POST['update'])) {
     try {
         $post_id = (int)$_POST['post_id'];
-        $title = htmlspecialchars(trim($_POST['title'] ?? ''));
-        $fname = htmlspecialchars(trim($_POST['fname'] ?? ''));
+        $title = $purifier->purify(trim($_POST['title'] ?? ''));
+        $fname = $purifier->purify(trim($_POST['fname'] ?? ''));
         $summary = $purifier->purify(trim($_POST['summary'] ?? ''));
         $content = $purifier->purify(trim($_POST['content'] ?? ''));
         $category = htmlspecialchars(trim($_POST['category'] ?? ''));
