@@ -7,85 +7,54 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/../db.php';
 
-
-$db_path = __DIR__ . '/../../includes/db.php';
-error_log("looking at: . $db_path");
-
-if(!file_exists($db_path)) {
-    die(json_encode([
-        'error' => 'Database config missing',
-        'debug' => [
-            'current_dir' => __DIR__,
-            'attempted_path' => $db_path,
-            'file_exists' => file_exists($db_path)
-        ]
-        ]));
-}
-
-require_once $db_path;
-
-if (empty($_SESSION['csrf_token'])) {
+/**
+ * Generates and stores a new CSRF token with expiration
+ */
+function generateCsrfToken() {
+    // Generate new token and set expiration (15 minutes)
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_expiry'] = time() + 900;
+    return $_SESSION['csrf_token'];
 }
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-
-$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
-    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
-require $autoloadPath;
-
-echo __DIR__ . '/vendor/autoload.php';
-
-
-function sendemail_verify($fname, $lname, $email, $verify_token) {
-    $mail = new PHPMailer(true);
-
-    try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; 
-        $mail->SMTPAuth = true;
-        $mail->Username = 'auth099109@gmail.com'; 
-        $mail->Password = 'jajp rxqr styh zxgr'; 
-        $mail->SMTPSecure = 'tls'; 
-        $mail->Port = 587; 
-
-        
-        $mail->setFrom('auth099109@gmail.com', $fname);
-        $mail->addAddress($email); 
-
-        // Content
-        $mail->isHTML(true);
-        $mail->Subject = 'Email Verification';
-        $verification_link = "http://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com/includes/user/verify.php?token=$verify_token";
-        $mail->Body = "
-            <h2>Hello $fname $lname,</h2>
-            <p>Thank you for registering! Please click the link below to verify your email address:</p>
-            <p><a href='$verification_link'>Verify Email</a></p>
-            <p>If you did not create an account, you can safely ignore this email.</p>
-        ";
-
-        // Send the email
-        $mail->send();
-        return true; 
-    } catch (Exception $e) {
-        error_log("PHPMailer Error: " . $e->getMessage()); 
+/**
+ * Validates the CSRF token
+ * @return bool True if valid, false otherwise
+ */
+function validateCsrfToken($token) {
+    // Check if token exists and matches
+    if (empty($token) || 
+        empty($_SESSION['csrf_token']) || 
+        !hash_equals($_SESSION['csrf_token'], $token)) {
         return false;
     }
+    
+    // Check expiration
+    if (empty($_SESSION['csrf_token_expiry']) || 
+        time() > $_SESSION['csrf_token_expiry']) {
+        return false;
+    }
+    
+    // Token is valid - generate a new one for next request
+    generateCsrfToken();
+    return true;
+}
+
+// Generate a new CSRF token if one doesn't exist or has expired
+if (empty($_SESSION['csrf_token']) || 
+    (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
+    generateCsrfToken();
 }
 
 if (isset($_POST['signUp'])) {
-    // CSRF Token Validation
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); // Fixed path (no `/../`)
+    // CSRF validation
+    if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        $_SESSION['error'] = "Security token invalid or expired";
+        header("Location: /../public/register.php");
         exit();
     }
-
-    // Regenerate a new CSRF token (after validation)
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Handle Sign Up
     $fname = trim($_POST['fname']);
@@ -94,7 +63,6 @@ if (isset($_POST['signUp'])) {
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
 
-   
     if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirm_password)) {
         $_SESSION['error'] = "All fields are required.";
     } elseif ($password !== $confirm_password) {
@@ -111,10 +79,7 @@ if (isset($_POST['signUp'])) {
         } else {
             // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-            // Generate a verification token
             $verification_token = bin2hex(random_bytes(32));
-
             
             $stmt = $conn->prepare("INSERT INTO users (fname, lname, email, password, verification_token, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
             $stmt->bind_param("sssss", $fname, $lname, $email, $hashedPassword, $verification_token);
@@ -137,15 +102,12 @@ if (isset($_POST['signUp'])) {
     header("Location: /../public/register.php");
     exit();
 } elseif (isset($_POST['signIn'])) {
-
-    // CSRF Token Validation
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        $_SESSION['error'] = "CSRF token validation failed.";
-        header("Location: /../public/register.php"); 
+    // CSRF validation
+    if (!validateCsrfToken($_POST['csrf_token'] ?? '')) {
+        $_SESSION['error'] = "Security token invalid or expired";
+        header("Location: /../public/register.php");
+        exit();
     }
-
-    // Regenerate a new CSRF token (after validation)
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     // Handle Sign In
     $email = trim($_POST['email']);
@@ -170,11 +132,13 @@ if (isset($_POST['signUp'])) {
                     $_SESSION['fname'] = $row['fname'];
                     $_SESSION['lname'] = $row['lname'];
 
+                    // Generate a new CSRF token for the authenticated session
+                    generateCsrfToken();
+
                     // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
                     exit();
                 } else {
-                    // Email is not verified - just show error without redirect
                     $_SESSION['error'] = "Please verify your email before logging in.";
                 }
             } else {
@@ -185,8 +149,50 @@ if (isset($_POST['signUp'])) {
         }
         $stmt->close();
     }
-
+    
     header("Location: /../public/register.php");
     exit(); 
+}
+
+// PHPMailer implementation remains the same
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
+    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
+require $autoloadPath;
+
+function sendemail_verify($fname, $lname, $email, $verify_token) {
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; 
+        $mail->SMTPAuth = true;
+        $mail->Username = 'auth099109@gmail.com'; 
+        $mail->Password = 'jajp rxqr styh zxgr'; 
+        $mail->SMTPSecure = 'tls'; 
+        $mail->Port = 587; 
+
+        $mail->setFrom('auth099109@gmail.com', $fname);
+        $mail->addAddress($email); 
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Email Verification';
+        $verification_link = "http://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com/includes/user/verify.php?token=$verify_token";
+        $mail->Body = "
+            <h2>Hello $fname $lname,</h2>
+            <p>Thank you for registering! Please click the link below to verify your email address:</p>
+            <p><a href='$verification_link'>Verify Email</a></p>
+            <p>If you did not create an account, you can safely ignore this email.</p>
+        ";
+
+        $mail->send();
+        return true; 
+    } catch (Exception $e) {
+        error_log("PHPMailer Error: " . $e->getMessage()); 
+        return false;
+    }
 }
 ?>

@@ -45,7 +45,7 @@ if (!$conn) {
         
         <h1 class= "form-title">Register</h1>
         <form method="post" action="/../includes/user/login.php" id= "signup" > 
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class= "input-group">
                 <input type="text" name="fname" id="fname" placeholder="First Name" required>
                 <label for="fname">First Name</label>
@@ -79,7 +79,7 @@ if (!$conn) {
     <div class="container" id="signin">
         <h1 class= "form-title">Sign In</h1>
         <form method="post" action="/../includes/user/login.php" id= "signin" > 
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             
         <div class="input-group">
                 <input type="email" name="email" id="email"  placeholder="Email" required>
