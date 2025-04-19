@@ -5,20 +5,17 @@
     RewriteCond %{REQUEST_URI} ^/(app/public/public|public/public)/(.*)$
     RewriteRule ^ /public/%2 [L,R=301]
     
-    # Ensure /public/ prefix for assets
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(assets/images/|images/)(.*)$ /public/assets/images/$2 [L,R=301]
     
     # Block direct /app/ access
     RewriteRule ^app/ - [F]
 
-    # Handle CORS preflight requests
     RewriteCond %{REQUEST_METHOD} OPTIONS
     RewriteRule ^ - [R=204,L]
 
 </IfModule>
 
-    # CORS Configuration (adjust domain as needed)
     Header set Access-Control-Allow-Origin "https://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com"
     Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
@@ -32,7 +29,7 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-    # Cache control for PHP files only
+    # Cache control 
     <FilesMatch "\.(php)$">
         Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
         Header set Pragma "no-cache"
