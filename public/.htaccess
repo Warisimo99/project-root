@@ -11,6 +11,29 @@
     
     # Block direct /app/ access
     RewriteRule ^app/ - [F]
+
+    # Handle CORS preflight requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^ - [R=204,L]
+
+</IfModule>
+<IfModule mod_headers.c>
+    # CORS Configuration (adjust domain as needed)
+    Header set Access-Control-Allow-Origin "https://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
+    Header set Access-Control-Allow-Credentials "true"
+    Header set Access-Control-Max-Age "3600"
+
+    # Security Headers
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Content Security Policy (adjust sources as needed)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self'"
 </IfModule>
 
     # Security Headers (only the critical ones)
