@@ -56,14 +56,12 @@ function getPostCount($conn, $user_id) {
     <div style="display: flex; justify-content: center; padding: 20px;">
         <h2 class="btn btn-outline-light centered-heading">Manage Posts</h2>
     </div>
-    <!-- Centered Dropdown and Post Count Card -->
     <div class="d-flex flex-column justify-content-center align-items-center vh-100">
         <!-- Post Count Card -->
         <div class="card mb-4" style="width: 18rem;">
             <div class="card-body text-center">
                 <h5 class="card-title">Your Posts</h5>
                 <?php
-                // Fetch the number of posts for the current user
                 $post_count = getPostCount($conn, $_SESSION['user_id']);
                 ?>
                 <p class="card-text display-4"><?php echo $post_count; ?></p>

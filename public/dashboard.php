@@ -9,11 +9,6 @@ if (!isset($_SESSION['email'])) {
 
 require_once __DIR__ . '/../includes/db.php';
 
-// Debug Check database connection
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
-
 // Fetch the top 6 trending posts
 $sql = "SELECT posts.*, COUNT(likes.id) AS like_count
         FROM posts
@@ -50,37 +45,6 @@ if ($rowCount > 0) {
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/dashstyle.css">
     <title>Dashboard</title>
-    <style>
-        .widgets-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr; 
-            grid-template-rows: auto; 
-            gap: 20px; 
-            padding: 20px; 
-        }
-        .tradingview-widget-container:first-child {
-            grid-row: span 2; 
-            max-width: 100%;
-        }
-        .tradingview-widget-container:nth-child(2),
-        .tradingview-widget-container:nth-child(3) {
-            grid-column: 2; 
-            max-width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .widgets-container {
-                grid-template-columns: 1fr; 
-            }
-            .tradingview-widget-container:first-child {
-                grid-row: span 1; 
-            }
-            .tradingview-widget-container:nth-child(2),
-            .tradingview-widget-container:nth-child(3) {
-                grid-column: 1;
-            }
-        }
-    </style>
 </head>
 
 <body>

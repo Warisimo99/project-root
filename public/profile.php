@@ -65,29 +65,6 @@ require_once __DIR__ . '/../includes/db.php';
 
     // Process form submissions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Update personal information
-        if (isset($_POST['update_info'])) {
-            $fname = trim($_POST['fname']);
-            $lname = trim($_POST['lname']);
-            $email = trim($_POST['email']);
-
-            $update_sql = "UPDATE users SET fname = ?, lname = ?, email = ?, WHERE id = ?";
-            $update_stmt = $conn->prepare($update_sql);
-            if (!$update_stmt) {
-                die("Error preparing statement: " . $conn->error);
-            }
-            $update_stmt->bind_param("ssssi", $fname, $lname, $email, $user_id);
-
-            if ($update_stmt->execute()) {
-                $_SESSION['success'] = "Profile updated successfully.";
-                header("Location: profile.php");
-                exit();
-            } else {
-                $_SESSION['error'] = "Failed to update profile.";
-                header("Location: profile.php");
-                exit();
-            }
-        }
 
         // Change password
         if (isset($_POST['change_password'])) {

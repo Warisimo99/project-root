@@ -76,24 +76,6 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/dashstyle.css">
     <title>Blog</title>
-    <style>
-        #searchResults {
-            position: absolute;
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: none;
-        }
-        .search-result {
-            padding: 30px;
-            border-bottom: 3px solid #eee;
-        }
-        .search-result:hover {
-            background: #f8f9fa;
-        }
-    </style>
 </head>
 <body>
     <!-- Your existing navbar with search form -->

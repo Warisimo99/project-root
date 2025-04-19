@@ -1,16 +1,9 @@
 <?php
 // Start the session
 session_start();
-header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . '/../includes/db.php';
 
-
-
-// Check if the connection was successful
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
 
 // Check if the post ID is provided in the URL
 if (!isset($_GET['id'])) {
@@ -109,7 +102,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                     </div>
                 </div>
                 <div class="mt-4">
-                    <form action="/includes/post_operations/add_like.php" method="POST">
+                    <form action="/../includes/post_operations/add_like.php" method="POST">
                         <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                         <button type="submit" class="btn btn-success">Like (<?php echo $likeCount; ?>)</button>
                     </form>
@@ -134,7 +127,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                 <div class="mt-5">
                     <h3>Leave a Comment</h3>
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <form action="/includes/post_operations/add_comment.php" method="POST">
+                        <form action="/../includes/post_operations/add_comment.php" method="POST">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                             <div class="mb-3">
@@ -144,7 +137,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                             <button type="submit" class="btn btn-primary">Submit Comment</button>
                         </form>
                     <?php else: ?>
-                        <p>Please <a href="login.php">log in</a> to leave a comment.</p>
+                        <p>Please <a href="register.php">log in</a> to leave a comment.</p>
                     <?php endif; ?>
                 </div>
 
