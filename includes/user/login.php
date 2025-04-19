@@ -8,45 +8,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../db.php';
-
-/**
- * Generates and stores a new CSRF token with expiration
- */
-function generateCsrfToken() {
-    // Generate new token and set expiration (15 minutes)
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    $_SESSION['csrf_token_expiry'] = time() + 900;
-    return $_SESSION['csrf_token'];
-}
-
-/**
- * Validates the CSRF token
- * @return bool True if valid, false otherwise
- */
-function validateCsrfToken($token) {
-    // Check if token exists and matches
-    if (empty($token) || 
-        empty($_SESSION['csrf_token']) || 
-        !hash_equals($_SESSION['csrf_token'], $token)) {
-        return false;
-    }
-    
-    // Check expiration
-    if (empty($_SESSION['csrf_token_expiry']) || 
-        time() > $_SESSION['csrf_token_expiry']) {
-        return false;
-    }
-    
-    // Token is valid - generate a new one for next request
-    generateCsrfToken();
-    return true;
-}
-
-// Generate a new CSRF token if one doesn't exist or has expired
-if (empty($_SESSION['csrf_token']) || 
-    (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
-    generateCsrfToken();
-}
+require_once 'csrf.php'; 
 
 if (isset($_POST['signUp'])) {
     // CSRF validation
@@ -132,9 +94,6 @@ if (isset($_POST['signUp'])) {
                     $_SESSION['fname'] = $row['fname'];
                     $_SESSION['lname'] = $row['lname'];
 
-                    // Generate a new CSRF token for the authenticated session
-                    generateCsrfToken();
-
                     // Redirect to dashboard
                     header("Location: /../public/dashboard.php");
                     exit();
@@ -154,7 +113,7 @@ if (isset($_POST['signUp'])) {
     exit(); 
 }
 
-// PHPMailer implementation remains the same
+// PHPMailer implementation
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

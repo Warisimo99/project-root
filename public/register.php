@@ -1,7 +1,15 @@
 <?php
 session_start();
 
+// Generate CSRF token if it doesn't exist or has expired
+if (empty($_SESSION['csrf_token']) || 
+    (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_expiry'] = time() + 900; // 15 minutes
+}
+
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/user/csrf.php';
 
 
 $conn = get_db_connection();
