@@ -1,5 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
     
     # Fix double public paths
     RewriteCond %{REQUEST_URI} ^/(app/public/public|public/public)/(.*)$
@@ -28,6 +29,7 @@
     Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
 
     # Cache control 
     <FilesMatch "\.(php)$">
@@ -36,6 +38,4 @@
         Header set Expires "Sat, 1 Jan 2000 00:00:00 GMT"
     </FilesMatch>
 
-    # Session protection
-    php_flag session.cookie_secure on
-    php_flag session.use_strict_mode on
+   
