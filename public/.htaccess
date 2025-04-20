@@ -37,6 +37,5 @@
     </FilesMatch>
 
     # Session protection
-    php_flag session.cookie_httponly on
     php_flag session.cookie_secure on
     php_flag session.use_strict_mode on
