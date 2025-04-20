@@ -35,8 +35,3 @@
         Header set Pragma "no-cache"
         Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
     </FilesMatch>
-
-    # Session protection
-    php_flag session.cookie_httponly on
-    php_flag session.cookie_secure on
-    php_flag session.use_strict_mode on
