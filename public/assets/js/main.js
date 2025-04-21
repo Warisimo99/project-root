@@ -22,15 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const signUpFormElement = document.querySelector('#signup');
         if (signUpFormElement) {
             signUpFormElement.addEventListener('submit', function (event) {
-                const userName = document.querySelector('#signup input[name="user_name"]').value;
                 const email = document.querySelector('#signup input[name="email"]').value;
                 const password = document.querySelector('#signup input[name="password"]').value;
                 const confirmPassword = document.querySelector('#signup input[name="confirm_password"]').value;
 
-                if (!userName) {
-                    event.preventDefault(); // Prevent form submission
-                    alert("Please enter a user name.");
-                }
 
                 if (!validateEmail(email)) {
                     event.preventDefault(); 
@@ -53,13 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const signInFormElement = document.querySelector('#signin');
         if (signInFormElement) {
             signInFormElement.addEventListener('submit', function (event) {
-                const userName = document.querySelector('#signin input[name="user_name"]').value;
                 const email = document.querySelector('#signin input[name="email"]').value;
                 const password = document.querySelector('#signin input[name="password"]').value;
 
-                if (!userName || !email || !password) {
+                if (!email || !password) {
                     event.preventDefault(); // Prevent form submission
-                    alert("User name, email, and password are required.");
+                    alert("Email and password are required.");
                 }
             });
         }
@@ -68,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Helper function to validate email
+// function to validate email
 function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
