@@ -28,6 +28,6 @@ if ($stmt->affected_rows > 0) {
     $_SESSION['error'] = "Failed to delete post.";
 }
 
-header("Location: public/post.php");
+header("Location: /../public/post.php");
 exit();
 ?>
