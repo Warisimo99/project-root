@@ -1,5 +1,4 @@
 <?php
-// MUST BE AT THE VERY TOP (before any HTML/output)
 session_start();
 
 // Generate new CSRF token BEFORE destroying session
