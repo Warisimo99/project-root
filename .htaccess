@@ -18,7 +18,7 @@
     RewriteRule ^ - [R=204,L]
 
 </IfModule>
-
+    # CORs Policy
     Header set Access-Control-Allow-Origin "https://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com"
     Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
