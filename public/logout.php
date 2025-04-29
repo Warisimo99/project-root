@@ -22,12 +22,12 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-// Start fresh session with CSRF token
+
 session_start();
 $_SESSION['csrf_token'] = $newCsrfToken;
 $_SESSION['csrf_token_expiry'] = time() + 900;
 
-// Redirect to register page
+
 header("Location: register.php");
 exit();
 ?>

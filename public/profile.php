@@ -66,7 +66,6 @@ require_once __DIR__ . '/../includes/db.php';
     // Process form submissions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        // Change password
         if (isset($_POST['change_password'])) {
             $current_password = trim($_POST['current_password']);
             $new_password = trim($_POST['new_password']);
@@ -134,16 +133,12 @@ require_once __DIR__ . '/../includes/db.php';
                 $conn->begin_transaction();
 
                 try {
-                    // Delete likes on user's posts
                     $conn->query("DELETE FROM likes WHERE post_id IN (SELECT id FROM posts WHERE user_id = $user_id)");
 
-                    // Delete comments on user's posts
                     $conn->query("DELETE FROM comments WHERE post_id IN (SELECT id FROM posts WHERE user_id = $user_id)");
 
-                    // Delete user's posts
                     $conn->query("DELETE FROM posts WHERE user_id = $user_id)");
 
-                    // Delete user's account
                     $conn->query("DELETE FROM users WHERE id = $user_id)");
 
                     $conn->commit();

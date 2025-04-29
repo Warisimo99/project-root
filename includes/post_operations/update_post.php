@@ -36,12 +36,11 @@ if ($result->num_rows > 0) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
     $title = trim($_POST['title']);
     $content = trim($_POST['content']);
-    $category = trim($_POST['category']); // Get the category field
+    $category = trim($_POST['category']); 
 
-    // Validate input
+
     if (empty($title) || empty($content) || empty($category)) {
         $_SESSION['error'] = "Title, content, and category cannot be empty.";
         header("Location: update_post.php?id=$post_id");

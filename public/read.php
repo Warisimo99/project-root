@@ -11,7 +11,7 @@ if (!isset($_GET['id'])) {
     exit();
 }
 
-// Sanitize the post ID to prevent SQL injection
+
 $postId = intval($_GET['id']);
 
 // Fetch the post from the database
@@ -21,13 +21,11 @@ mysqli_stmt_bind_param($stmt, 'i', $postId);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
-// Check if the post exists
 if (mysqli_num_rows($result) == 0) {
     header("Location: error.php?message=Post not found.");
     exit();
 }
 
-// Fetch the post as an associative array
 $post = mysqli_fetch_assoc($result);
 
 // Fetch the number of likes for the post

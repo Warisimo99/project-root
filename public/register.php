@@ -28,9 +28,8 @@ if (!$conn) {
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <div class="container" id="signup" style="display:none;">
-          <!-- Display success/error messages -->
-          <?php if (isset($_SESSION['success'])): ?>
+     <!-- Display success/error messages -->
+     <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -44,6 +43,7 @@ if (!$conn) {
             </div>
         <?php endif; ?>
         
+    <div class="container" id="signup" style="display:none;">
         <h1 class= "form-title">Register</h1>
         <form method="post" action="/../includes/user/login.php" id= "signup" > 
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">

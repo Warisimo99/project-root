@@ -17,17 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Post ID is missing.");
     }
 
-    // Sanitize inputs
     $postId = intval($_POST['post_id']);
     $userId = intval($_SESSION['user_id']);
     $comment = trim($_POST['comment']); 
 
-    // Validate the comment
     if (empty($comment)) {
         die("Comment cannot be empty.");
     }
 
-    // Insert the comment into the database
     $sql = "INSERT INTO comments (post_id, user_id, comment) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
 
