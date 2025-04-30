@@ -32,6 +32,7 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
+    Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:;
 
     # Cache control 
     <FilesMatch "\.(php)$">
