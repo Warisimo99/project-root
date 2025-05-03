@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($update_stmt->execute()) {
         $_SESSION['success'] = "Post updated successfully.";
-        header("Location: profile.php"); 
+        header("Location: /../public/profile.php"); 
         exit();
     } else {
         $_SESSION['error'] = "Failed to update post.";
