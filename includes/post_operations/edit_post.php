@@ -1,7 +1,4 @@
 <?php
-require_once __DIR__ . '/../includes/functions/validation.php';
-require_once __DIR__ . '/../includes/functions/sanitize.php';
-
 session_start();
 require_once __DIR__ . '/../db.php';
 

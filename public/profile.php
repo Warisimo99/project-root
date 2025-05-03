@@ -1,7 +1,15 @@
 <?php
 session_start();
 
+// Generate CSRF token if it doesn't exist or has expired
+if (empty($_SESSION['csrf_token']) || 
+    (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_expiry'] = time() + 900; // 15 minutes
+}
+
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/user/csrf.php';
 
 
 // Fetch the user's posts
@@ -238,6 +246,7 @@ require_once __DIR__ . '/../includes/db.php';
                     <!-- Personal Information Tab -->
                     <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
                         <form action="profile.php" method="post">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                             <div class="mb-3">
                                 <label for="name" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="fname" name="fname" value="<?php echo htmlspecialchars($user['fname']); ?>" readonly>
@@ -257,6 +266,7 @@ require_once __DIR__ . '/../includes/db.php';
                     <!-- Password Change Tab -->
                     <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                         <form action="profile.php" method="post">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                             <div class="mb-3">
                                 <label for="current_password" class="form-label">Current Password</label>
                                 <input type="password" class="form-control" id="current_password" name="current_password" required>
