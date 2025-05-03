@@ -2,6 +2,7 @@
 session_start();
 
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/user/csrf.php';
 
 function getPostCount($conn, $user_id) {
     $stmt = $conn->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE user_id = ?");
@@ -107,6 +108,8 @@ function getPostCount($conn, $user_id) {
                 </div>
                 <div class="modal-body">
                     <form action="/../includes/process.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+
                         <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                         <div class="form-field mb-4">
                             <input type="text" class="form-control" name="title" placeholder="Enter Title:" required>

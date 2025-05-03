@@ -1,9 +1,14 @@
 <?php
-require_once __DIR__ . '/../includes/functions/validation.php';
-require_once __DIR__ . '/../includes/functions/sanitize.php';
 
 session_start();
-require_once __DIR__ . '/../db.php';
+// Load dependencies
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'db.php';
+
+// Initialize HTML Purifier
+$config = HTMLPurifier_Config::createDefault();
+$config->set('HTML.Allowed', 'p,br,a[href],strong,em,ul,ol,li,img[src|alt],h1,h2,h3,h4');
+$purifier = new HTMLPurifier($config);
 
 // Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $postId = intval($_POST['post_id']);
     $userId = intval($_SESSION['user_id']);
-    $comment = trim($_POST['comment']); 
+    $comment = $purifier->purify(trim($_POST['comment'])); 
 
     if (empty($comment)) {
         die("Comment cannot be empty.");

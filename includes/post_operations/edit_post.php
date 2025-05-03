@@ -1,10 +1,18 @@
 <?php
 session_start();
-require_once __DIR__ . '/../db.php';
+
+// Load dependencies
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'db.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Initialize HTML Purifier
+$config = HTMLPurifier_Config::createDefault();
+$config->set('HTML.Allowed', 'p,br,a[href],strong,em,ul,ol,li,img[src|alt],h1,h2,h3,h4');
+$purifier = new HTMLPurifier($config);
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -36,9 +44,9 @@ if ($result->num_rows > 0) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = trim($_POST['title']);
-    $content = trim($_POST['content']);
-    $category = trim($_POST['category']); 
+    $title = $purifier->purify(trim($_POST['title']));
+    $content = $purifier->purify(trim($_POST['content']));
+    $category = $purifier->purify(trim($_POST['category'])); 
 
     
     if (empty($title) || empty($content) || empty($category)) {
@@ -56,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($update_stmt->execute()) {
         $_SESSION['success'] = "Post updated successfully.";
-        header("Location: /../public/profile.php"); 
+        header("Location: /../public/post.php"); 
         exit();
     } else {
         $_SESSION['error'] = "Failed to update post.";
