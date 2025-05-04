@@ -33,7 +33,7 @@
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
 
-    Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; frame-ancestors 'none';
+    Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none';
     
 
     # Cache control 
