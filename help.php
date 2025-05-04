@@ -51,73 +51,111 @@
         <h2 class="btn btn-outline-light centered-heading">Help Page</h2>
     </div>
 
-        <!-- Section 1: Website Features -->
+        <!-- Website Features -->
         <div class="card">
             <div class="card-header">
                 Website Features
             </div>
             <div class="card-body">
-                <h5>Live Market Information</h5>
-                <p>
-                    Our website provides real-time market data, including stock prices, forex rates, and cryptocurrency trends. 
-                    You can check live market information using the interactive charts and widgets available on the dashboard.
-                </p>
+            <h5>Live Market Information</h5>
+            <p>
+                Our website provides real-time market data, including stock prices, forex rates, and cryptocurrency trends, 
+                powered by third-party tools like TradingView. <strong>All data is for informational purposes only</strong> 
+                and must not be construed as financial advice.
+            </p>
 
-                <h5>Upload Blog Posts</h5>
-                <p>
-                    Users can create and upload blog posts to share their insights, strategies, and market analysis. 
-                    Simply navigate to the "Create Post" section, write your content, and publish it for others to see.
-                </p>
+            <h5>Upload Blog Posts</h5>
+            <p>
+                Share your market insights, strategies, or analysis via blog posts. 
+                <strong>By posting, you agree to our community guidelines:</strong>
+                <ul>
+                    <li>No financial advice (only general discussion or personal opinions).</li>
+                    <li>No market manipulation, scams, or abusive behavior.</li>
+                    <li>Always include disclaimers (e.g., "This is my personal view, not advice").</li>
+                </ul>
+                Violations will result in content removal or account suspension.
+            </p>
 
-                <h5>Interact with Likes and Comments</h5>
-                <p>
-                    Engage with the community by liking and commenting on blog posts. 
-                    Your feedback and interactions help build a vibrant and collaborative trading community.
-                </p>
-            </div>
+            <h5>Interact with Likes and Comments</h5>
+            <p>
+                Engage respectfully with the community. Report harmful content using the flag (<i class="fas fa-flag"></i>) button. 
+                Moderators review flagged posts within 24 hours.
+            </p>
         </div>
 
-        <!-- Section 2: Purpose of the Website -->
+        <!-- Purpose & Legal Compliance -->
         <div class="card">
             <div class="card-header">
                 Purpose of the Website
             </div>
             <div class="card-body">
                 <p>
-                    This website is designed to provide a platform for aspiring traders to access live market information, 
-                    share their knowledge through blog posts, and interact with a community of like-minded individuals. </p>
-                  </br><br>
-
-                <p> Additionally, it serves as a project to test and demonstrate robust security measures to protect user data and ensure a safe online environment.</p>
+                    This platform connects traders to share <strong>educational content and opinions</strong> about markets. 
+                    <span class="text-danger">
+                        <strong>Never interpret discussions as financial advice.</strong> Trading carries risks; 
+                        always consult a licensed professional.
+                    </span>
+                </p>
+                <p>
+                    We comply with the <strong>Financial Services and Markets Act 2000 (FSMA)</strong> and 
+                    <strong>FCA regulations</strong>. Users must avoid:
+                </p>
+                <ul>
+                    <li>Providing regulated financial advice (unauthorized activity).</li>
+                    <li>Sharing misleading information or pump-and-dump schemes.</li>
+                    <li>Violating third-party terms (e.g., TradingView's API policies).</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Section 3: Copyright Credits -->
+        <!-- Copyright & Licensing -->
         <div class="card">
             <div class="card-header">
-                Copyright Credits
+                Copyright Credits & Licensing
             </div>
             <div class="card-body">
                 <p>
-                    The following widgets and tools are used on this website and are copyrighted by their respective owners, also completely free to use:
+                    This site uses licensed third-party tools. By using them, you agree to their terms:
                 </p>
                 <ul>
-
                     <li>
-                        <strong>TradingView Widgets:</strong> Charts and market data widgets are provided by 
-                        <a href="https://www.tradingview.com/" target="_blank">TradingView</a>. 
+                        <strong>TradingView Widgets:</strong> Charts are © <a href="https://www.tradingview.com/" target="_blank">TradingView</a>. 
+                        Embedding complies with their <a href="https://www.tradingview.com/terms/" target="_blank">Terms of Service</a>.
                     </li>
-                    </br></br>
                     <li>
-                        <strong>Font Awesome Icons:</strong> Icons used on this website are provided by 
-                        <a href="https://fontawesome.com/" target="_blank">Font Awesome</a>.
+                        <strong>Font Awesome Icons:</strong> © <a href="https://fontawesome.com/" target="_blank">Font Awesome</a> 
+                        (used under <a href="https://fontawesome.com/license" target="_blank">free license</a>).
                     </li>
-                    </br></br>
                     <li>
-                        <strong>My FxBook:</strong> Market data widgets are provided by 
-                        <a href="https://www.myfxbook.com/get-widget/12/general_widgets/" target="_blank">My FxBook</a>.
+                        <strong>MyFxBook Widgets:</strong> Data provided by <a href="https://www.myfxbook.com" target="_blank">MyFxBook</a> 
+                        under their <a href="https://www.myfxbook.com/terms" target="_blank">widget policy</a>.
                     </li>
                 </ul>
+                <p class="mt-3">
+                    <strong>User-generated content:</strong> Posts default to <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a> 
+                    unless specified otherwise. You retain ownership but grant the platform sharing rights.
+                </p>
+            </div>
+        </div>
+
+        <!-- User Safety & Wellbeing -->
+        <div class="card">
+            <div class="card-header">
+                Safety & Wellbeing Resources
+            </div>
+            <div class="card-body">
+                <h5>Protecting Yourself & Others</h5>
+                <ul>
+                    <li>Verify information independently before acting on it.</li>
+                    <li>Avoid sharing personal financial details.</li>
+                    <li>Report suspicious activity via <a href="/contact">Contact Form</a>.</li>
+                </ul>
+                <h5>Mental Health Support</h5>
+                <p>
+                    Trading stress is real. Free confidential help:
+                    <a href="https://www.mind.org.uk" target="_blank">Mind UK</a> | 
+                    <a href="https://www.samaritans.org" target="_blank">Samaritans</a>.
+                </p>
             </div>
         </div>
     </div>
