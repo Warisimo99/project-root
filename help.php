@@ -78,8 +78,8 @@
 
             <h5>Interact with Likes and Comments</h5>
             <p>
-                Engage respectfully with the community. Report harmful content using the flag (<i class="fas fa-flag"></i>) button. 
-                Moderators review flagged posts within 24 hours.
+                Engage respectfully with the community. Harmful Content will result in account termination. 
+                Posts will be reviewed every 24 hours.
             </p>
         </div>
 
