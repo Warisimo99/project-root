@@ -33,16 +33,7 @@
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
 
-    Content-Security-Policy:  
-    default-src 'self';  
-    script-src 'self' https://*.tradingview.com 'unsafe-inline' 'unsafe-eval';  
-    style-src 'self' https://*.tradingview.com 'unsafe-inline';  
-    img-src 'self' https://*.tradingview.com data: https:;  
-    connect-src 'self' https://*.tradingview.com wss://*.tradingview.com;  
-    frame-src 'self' https://*.tradingview.com https://*.youtube.com;  
-    object-src 'none';  
-    base-uri 'self';  
-    form-action 'self';  
+    Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; frame-ancestors 'none';
     
 
     # Cache control 
