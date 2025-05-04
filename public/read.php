@@ -2,7 +2,16 @@
 // Start the session
 session_start();
 
+// Generate CSRF token if it doesn't exist or has expired
+if (empty($_SESSION['csrf_token']) || 
+    (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token_expiry'] = time() + 900; // 15 minutes
+}
+
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/user/csp.php';
+require_once __DIR__ . '/../includes/user/csrf.php';
 
 
 // Check if the post ID is provided in the URL
@@ -126,6 +135,7 @@ $comments = mysqli_fetch_all($commentsResult, MYSQLI_ASSOC);
                     <h3>Leave a Comment</h3>
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <form action="/../includes/post_operations/add_comment.php" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                             <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                             <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
                             <div class="mb-3">
