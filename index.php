@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 // Start the session
 session_start();
 
-require_once __DIR__ . 'includes/user/csp.php';
+require_once __DIR__ . '/../includes/user/csp.php';
 
 ?>
 <!DOCTYPE html>
