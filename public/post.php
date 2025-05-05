@@ -10,7 +10,7 @@ if (empty($_SESSION['csrf_token']) ||
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/user/csrf.php';
-require_once __DIR__ . '/../includes/user/csp.php';
+
 
 function getPostCount($conn, $user_id) {
     $stmt = $conn->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE user_id = ?");

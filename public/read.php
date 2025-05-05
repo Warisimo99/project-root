@@ -10,7 +10,6 @@ if (empty($_SESSION['csrf_token']) ||
 }
 
 require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/user/csp.php';
 require_once __DIR__ . '/../includes/user/csrf.php';
 
 
