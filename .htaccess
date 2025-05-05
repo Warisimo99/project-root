@@ -24,8 +24,7 @@
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
     Header set Access-Control-Allow-Credentials "true"
     Header set Access-Control-Max-Age "3600"
-    SetEnvIf Origin "^https://(shielded-garden-06013\.herokuapp\.com|s\.tradingview\.com)$" CORS_ALLOW_ORIGIN=$1
-
+ 
     # Security Headers 
     Header always set X-Frame-Options "DENY"
     Header always set X-Content-Type-Options "nosniff"
@@ -33,18 +32,7 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
-    Header always set Content-Security-Policy "
-        default-src 'self';
-        script-src 'self';  # Strict for your site
-        style-src 'self' 'unsafe-inline';  # Allow inline styles if needed
-        img-src 'self' data: https://*.tradingview.com;
-        connect-src 'self' https://shielded-garden-06013.herokuapp.com https://*.tradingview.com;
-        frame-src 'self' https://*.tradingview.com;  # Allow TradingView iframes
-        frame-ancestors 'none';  # Prevent your site from being embedded
-        form-action 'self';
-        object-src 'none';
-        base-uri 'self';
-    "
+    Header always set Content-Security-Policy "default-src 'self';"
     
 
     # Cache control 
