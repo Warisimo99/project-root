@@ -32,7 +32,7 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://*.tradingview.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
     
 
     # Cache control 
