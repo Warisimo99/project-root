@@ -24,9 +24,7 @@
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-CSRF-Token"
     Header set Access-Control-Allow-Credentials "true"
     Header set Access-Control-Max-Age "3600"
-    SetEnvIf Origin "^(https://shielded-garden-06013-bc1acbc5ebcd\.herokuapp\.com)$" CORS_ALLOW_ORIGIN=$1
-    Header set Access-Control-Allow-Origin "%{CORS_ALLOW_ORIGIN}e" env=CORS_ALLOW_ORIGIN
-    Header set Access-Control-Allow-Credentials "true" env=CORS_ALLOW_ORIGIN
+    SetEnvIf Origin "^https://(shielded-garden-06013\.herokuapp\.com|s\.tradingview\.com)$" CORS_ALLOW_ORIGIN=$1
 
     # Security Headers 
     Header always set X-Frame-Options "DENY"
@@ -35,7 +33,19 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header edit Set-Cookie ^(.*)$ "$1; SameSite=Lax"
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://static.tradingview.com https://*.tradingview.com https://*.ampproject.org https://*.paypal.com https://platform.twitter.com https://platform.x.com https://songbird.cardinalcommerce.com https://checkout.razorpay.com https://*.checkout.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://kit.fontawesome.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ka-f.fontawesome.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: https://*.tradingview.com https://thumbs.dreamstime.com https://s3.tradingview.com; font-src 'self' data: https://fonts.gstatic.com https://ka-f.fontawesome.com; connect-src 'self' https://*.tradingview.com https://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com https://ka-f.fontawesome.com https://s3.tradingview.com; frame-src 'self' https://*.tradingview.com https://www.tradingview-widget.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; report-uri /csp-report-endpoint"
+   Header always set Content-Security-Policy "
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://static.tradingview.com https://*.tradingview.com https://s.tradingview.com https://s3.tradingview.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' data: https://*.tradingview.com https://s3.tradingview.com;
+    font-src 'self' data: https://fonts.gstatic.com;
+    connect-src 'self' https://*.tradingview.com https://s3.tradingview.com;
+    frame-src 'self' https://*.tradingview.com;
+    frame-ancestors 'none';
+    form-action 'self';
+    base-uri 'self';
+    object-src 'none';
+"
     
 
     # Cache control 
