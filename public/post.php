@@ -11,6 +11,11 @@ if (empty($_SESSION['csrf_token']) ||
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/user/csrf.php';
 
+echo '<pre>Debug Links:';
+echo 'Edit URL: /includes/post_operations/edit_post.php?id=' . $row['id'];
+echo 'Delete URL: /includes/post_operations/delete_post.php?id=' . $row['id'];
+echo '</pre>';
+
 
 function getPostCount($conn, $user_id) {
     $stmt = $conn->prepare("SELECT COUNT(*) AS post_count FROM posts WHERE user_id = ?");
@@ -167,8 +172,9 @@ function getPostCount($conn, $user_id) {
                     <div class="card-text"><strong>Content:</strong> ' . $row['content'] . '</div> <!-- Already purified -->
                     <p class="card-text"><strong>Category:</strong> ' . htmlspecialchars($row['category']) . '</p>
                     <p class="card-text"><strong>Created At:</strong> ' . htmlspecialchars($row['created_at']) . '</p>
+                    
                     <div class="d-flex gap-2">
-                        <a href="/../app/includes/post_operations/edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
+                        <a href="/../includes/post_operations/edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
                         <a href="/../includes/post_operations/delete_post.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this post?\')">Delete</a>
                     </div>
                 </div>
