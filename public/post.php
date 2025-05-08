@@ -170,7 +170,7 @@ function getPostCount($conn, $user_id) {
                     <p class="card-text"><strong>Created At:</strong> ' . htmlspecialchars($row['created_at']) . '</p>
                     
                     <div class="d-flex gap-2">
-                        <a href="edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
+                        <a href="/../includes/post_operations/edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
                         <a href="/../includes/post_operations/delete_post.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this post?\')">Delete</a>
                     </div>
                 </div>
