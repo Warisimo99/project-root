@@ -96,9 +96,6 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <li class="nav-item">
                         <a class="nav-link" href="profile.php">Profile</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog.php">Blog</a>
-                    </li>
                 </ul>
                 <form class="d-flex" role="search" id="searchForm">
                     <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" id="searchInput">
