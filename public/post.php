@@ -168,7 +168,7 @@ function getPostCount($conn, $user_id) {
                     <p class="card-text"><strong>Category:</strong> ' . htmlspecialchars($row['category']) . '</p>
                     <p class="card-text"><strong>Created At:</strong> ' . htmlspecialchars($row['created_at']) . '</p>
                     <div class="d-flex gap-2">
-                        <a href="/includes/post_operations/edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
+                        <a href="/../includes/post_operations/edit_post.php?id=' . $row['id'] . '" class="btn btn-primary">Edit</a>
                         <a href="/../includes/post_operations/delete_post.php?id=' . $row['id'] . '" class="btn btn-danger" onclick="return confirm(\'Are you sure you want to delete this post?\')">Delete</a>
                     </div>
                 </div>
@@ -197,6 +197,8 @@ function getPostCount($conn, $user_id) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+
+    <script type="module" src ="/../public/assets/js/main.js"></script>
 </body>
 
 <footer class="footer bg-dark text-white py-4">

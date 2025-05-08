@@ -62,6 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.querySelectorAll('.btn-danger').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // Stop immediate deletion
+        if (confirm('Are you sure you want to delete this post?')) {
+            window.location.href = this.href; // Proceed only if confirmed
+        }
+    });
+});
+
 // function to validate email
 function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
