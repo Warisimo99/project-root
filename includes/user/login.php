@@ -7,8 +7,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 require_once __DIR__ . '/../db.php';
 require_once 'csrf.php'; 
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 
 if (isset($_POST['signUp'])) {
     // CSRF validation
@@ -113,13 +119,7 @@ if (isset($_POST['signUp'])) {
     exit(); 
 }
 
-// PHPMailer implementation
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-$autoloadPath = file_exists(__DIR__ . '/vendor/autoload.php') 
-    ? __DIR__ . '/vendor/autoload.php' : '/app/vendor/autoload.php';            
-require $autoloadPath;
 
 function sendemail_verify($fname, $lname, $email, $verify_token) {
     $mail = new PHPMailer(true);
