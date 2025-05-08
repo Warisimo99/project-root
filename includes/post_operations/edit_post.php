@@ -5,9 +5,6 @@ session_start();
 
 require_once __DIR__ .  '/../db.php';
 
-if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    die('Composer dependencies not installed. Run "composer install".');
-}
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
