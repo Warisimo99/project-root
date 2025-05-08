@@ -2,7 +2,7 @@
 
 session_start();
 // Load dependencies
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../db.php';
 
 // Initialize HTML Purifier
