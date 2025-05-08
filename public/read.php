@@ -2,6 +2,9 @@
 // Start the session
 session_start();
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Generate CSRF token if it doesn't exist or has expired
 if (empty($_SESSION['csrf_token']) || 
     (isset($_SESSION['csrf_token_expiry']) && time() > $_SESSION['csrf_token_expiry'])) {
