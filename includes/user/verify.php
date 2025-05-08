@@ -29,7 +29,7 @@ if (isset($_GET['token'])) {
     }
 
     // Redirect to login page
-    header("Location: /../public/register.php");
+    header("Location: https://shielded-garden-06013-bc1acbc5ebcd.herokuapp.com/public/register.php");
     exit();
 } else {
     $_SESSION['error'] = "No verification token provided.";
