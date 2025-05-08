@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <textarea class="form-control" id="category" name="category" rows="10" required><?php echo htmlspecialchars($post['category']); ?></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Update Post</button>
-                    <a href="post.php?id=<?php echo $post_id; ?>" class="btn btn-secondary">Back to Post</a>
+                    <a href="/../public/post.php?id=<?php echo $post_id; ?>" class="btn btn-secondary">Back to Post</a>
                 </form>
             </div>
         </div>
